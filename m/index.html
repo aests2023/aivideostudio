@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <script>
+    (function() {
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+                     || (window.innerWidth < 768);
+      if (!isMobile) {
+        var path = window.location.pathname;
+        var page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+        window.location.href = '../' + page;
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="상상을 영상으로 만드는 AI 영상공방 모바일. 광고, 유튜브 쇼츠, 3D 애니메이션 등 기획부터 완성까지 AI 기반의 빠르고 감동적인 결과물.">
+  <title>AI 영상공방 | 모바일 홈</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        AI 영상공방
+      </a>
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">HOME</a></li>
+          <li><a href="services.html" class="nav-link">서비스</a></li>
+          <li><a href="portfolio.html" class="nav-link">포트폴리오</a></li>
+          <li><a href="process.html" class="nav-link">제작과정</a></li>
+          <li><a href="pricing.html" class="nav-link">가격안내</a></li>
+          <li><a href="contact.html" class="nav-link nav-cta">문의하기</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-toggle" id="mobileToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <span class="section-tag">AI VIDEO WORKSHOP</span>
+          <h1 class="hero-title serif">당신의 상상을<br>영상으로 만듭니다.</h1>
+          <p class="hero-desc">
+            최신 인공지능 그래픽 엔진과 아날로그 감성 편집을 결합하여, 세상에 단 하나뿐인 고품질 영상을 빠르고 합리적인 가격으로 선사합니다.
+          </p>
+          <div class="cta-group">
+            <a href="contact.html" class="btn btn-primary">무료 상담 신청하기</a>
+            <a href="portfolio.html" class="btn btn-outline">포트폴리오 감상하기</a>
+          </div>
+          <div class="hero-visual">
+            <img src="../assets/hero_bg.png" alt="AI 영상공방 비주얼" class="hero-img">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Teaser -->
+    <section class="services">
+      <div class="container">
+        <div class="section-title-wrapper">
+          <span class="section-tag">WHAT WE DO</span>
+          <h2 class="section-title">주요 서비스</h2>
+          <p class="section-subtitle">AI 기술과 섬세한 연출이 만나 완성되는 4대 서비스 라인업</p>
+        </div>
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">🎬</div>
+            <h3 class="service-card-title">AI 광고 영상</h3>
+            <p class="service-desc">브랜드 고유의 감성을 녹여낸 시네마틱 톤 광고 및 커머셜 영상</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">📱</div>
+            <h3 class="service-card-title">쇼츠 제작</h3>
+            <p class="service-desc">릴스, 쇼츠, 틱톡 등 몰입도 높은 모바일 특화 세로형 9:16 비디오</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🎨</div>
+            <h3 class="service-card-title">3D 애니메이션</h3>
+            <p class="service-desc">동화풍의 따뜻한 감성 렌더링을 적용한 3D 시퀀스 및 스토리텔링 무비</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🎵</div>
+            <h3 class="service-card-title">CCM 뮤직비디오</h3>
+            <p class="service-desc">선율에 어울리는 감각적인 AI 비주얼을 적용한 고품질 리릭 뮤비</p>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a href="services.html" class="btn btn-primary" style="width: 100%;">서비스 상세 정보 보기 ➔</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Teaser -->
+    <section class="portfolio" style="background-color: var(--color-bg-muted);">
+      <div class="container">
+        <div class="section-title-wrapper">
+          <span class="section-tag">PORTFOLIO</span>
+          <h2 class="section-title">대표 포트폴리오</h2>
+          <p class="section-subtitle">터치 시 유튜브 팝업창을 통해 바로 감상하실 수 있습니다.</p>
+        </div>
+        <div class="portfolio-grid">
+          <div class="portfolio-card" data-youtube="vk23h9RytQU">
+            <div class="portfolio-media">
+              <img src="../assets/01.png" alt="디저트하우스 광고" class="portfolio-img">
+              <div class="portfolio-play-overlay">
+                <div class="play-btn-circle">▶</div>
+              </div>
+            </div>
+            <div class="portfolio-info">
+              <span class="portfolio-category">AI 광고 영상</span>
+              <h3 class="portfolio-card-title">디저트하우스 15초 광고</h3>
+              <p class="portfolio-desc">달콤한 디저트의 매력을 감각적인 AI 연출과 트렌디한 타이포로 완성한 광고</p>
+            </div>
+          </div>
+          <div class="portfolio-card" data-youtube="SonaFMIdybU">
+            <div class="portfolio-media">
+              <img src="../assets/02.png" alt="그림자의 행진" class="portfolio-img">
+              <div class="portfolio-play-overlay">
+                <div class="play-btn-circle">▶</div>
+              </div>
+            </div>
+            <div class="portfolio-info">
+              <span class="portfolio-category">3D 애니메이션</span>
+              <h3 class="portfolio-card-title">그림자의 행진</h3>
+              <p class="portfolio-desc">실루엣 캐릭터들의 따뜻한 모험을 담아낸 서정적 동화 감성의 애니메이션</p>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a href="portfolio.html" class="btn btn-primary" style="width: 100%;">전체 포트폴리오 보기 ➔</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process Teaser -->
+    <section class="process">
+      <div class="container">
+        <div class="section-title-wrapper">
+          <span class="section-tag">TIMELINE</span>
+          <h2 class="section-title">체계적인 제작 과정</h2>
+          <p class="section-subtitle">상담부터 납품까지 투명하고 유기적인 4단계 플로우</p>
+        </div>
+        <div class="process-timeline">
+          <div class="process-step">
+            <div class="step-num-circle">01</div>
+            <div>
+              <h3 class="step-title">상담</h3>
+              <p class="step-desc">의뢰 및 니즈 파악, 기초 비주얼 콘셉트 설정</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num-circle">02</div>
+            <div>
+              <h3 class="step-title">기획</h3>
+              <p class="step-desc">대본 작성 및 컷 시놉시스 기획 설계</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num-circle">03</div>
+            <div>
+              <h3 class="step-title">제작</h3>
+              <p class="step-desc">AI 비주얼 생성, 음향 보이스 적용 및 정밀 편집</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num-circle">04</div>
+            <div>
+              <h3 class="step-title">납품</h3>
+              <p class="step-desc">세부 피드백 정밀 조정 후 고화질 영상 납품</p>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a href="process.html" class="btn btn-primary" style="width: 100%;">상세 제작과정 안내 ➔</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Teaser -->
+    <section class="pricing" style="background-color: var(--color-bg-muted);">
+      <div class="container">
+        <div class="section-title-wrapper">
+          <span class="section-tag">PRICING</span>
+          <h2 class="section-title">합리적인 제작 요금</h2>
+          <p class="section-subtitle">용도에 맞춰 세분화된 세 가지 합리적인 옵션</p>
+        </div>
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <h3 class="pricing-name">Starter</h3>
+            <p class="pricing-desc">소셜 미디어 특화 세로형 쇼츠</p>
+            <div class="pricing-cost">
+              <span class="amount">5만원</span>
+              <span class="period">부터 / 편</span>
+            </div>
+            <a href="contact.html" class="btn btn-outline pricing-btn">상담 및 신청</a>
+          </div>
+          <div class="pricing-card popular">
+            <span class="popular-badge">가장 인기</span>
+            <h3 class="pricing-name">Standard</h3>
+            <p class="pricing-desc">스토리 중심 감성 채널 홍보영상</p>
+            <div class="pricing-cost">
+              <span class="amount">15만원</span>
+              <span class="period">부터 / 편</span>
+            </div>
+            <a href="contact.html" class="btn btn-primary pricing-btn">상담 및 신청</a>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a href="pricing.html" class="btn btn-primary" style="width: 100%;">전체 요금제 & FAQ ➔</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews">
+      <div class="container">
+        <div class="section-title-wrapper">
+          <span class="section-tag">TESTIMONIALS</span>
+          <h2 class="section-title">고객 후기</h2>
+        </div>
+        <div class="reviews-container">
+          <div class="review-slider">
+            <div class="review-track" id="reviewTrack">
+              <div class="review-slide">
+                <div class="review-card">
+                  <div class="review-stars">★★★★★</div>
+                  <p class="review-text">"영상 퀄리티 정말 자연스럽고 과하지 않게 기대 이상이네요.. 정말 감사합니다!"</p>
+                  <div class="review-author">디저트하우스 대표</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" style="background-color: var(--color-bg-muted); text-align: center; border-top: 1px solid var(--color-border);">
+      <div class="container">
+        <h2 class="serif" style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--color-primary);">상상을 감동적인 영상으로</h2>
+        <p style="font-size: 0.9rem; color: var(--color-secondary); margin-bottom: 1.75rem; font-weight: 300;">무료 맞춤형 비주얼 기획서 설계를 상담받아 보세요.</p>
+        <a href="contact.html" class="btn btn-primary" style="width: 100%;">간편 견적 상담 신청하기</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-layout">
+        <div>
+          <div class="footer-logo">AI 영상공방</div>
+          <p class="footer-desc">AI 제작 기법과 디테일한 편집으로 깊은 울림을 주는 고품질 영상 콘텐츠를 기획·제작합니다.</p>
+        </div>
+        <div class="footer-links">
+          <h4 class="footer-title">바로가기</h4>
+          <a href="index.html" class="footer-link">HOME</a>
+          <a href="services.html" class="footer-link">주요 서비스</a>
+          <a href="portfolio.html" class="footer-link">대표 포트폴리오</a>
+          <a href="process.html" class="footer-link">제작 프로세스</a>
+          <a href="pricing.html" class="footer-link">이용 요금</a>
+          <a href="contact.html" class="footer-link">무료 상담 센터</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 AI 영상공방. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <!-- Event Popup Modal -->
+  <div id="homePopup" class="home-popup">
+    <div class="home-popup-content">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeItlzuADqwEZujiHfthqGqcC2EA4KTzIw9gxBRuJOYNWjy3w/viewform" target="_blank" rel="noopener noreferrer">
+        <img src="../assets/popup.png" alt="이벤트 팝업" class="home-popup-img">
+      </a>
+      <div class="home-popup-footer">
+        <button id="btnHideToday" class="popup-footer-btn">오늘 하루 보지 않기</button>
+        <button id="btnClosePopup" class="popup-footer-btn">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
