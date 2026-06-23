@@ -634,4 +634,40 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // 8. Event Popup Modal Control
+  const homePopup = document.getElementById('homePopup');
+  const btnHideToday = document.getElementById('btnHideToday');
+  const btnClosePopup = document.getElementById('btnClosePopup');
+
+  if (homePopup && btnHideToday && btnClosePopup) {
+    // Check localStorage if popup should be hidden today
+    const hideTodayValue = localStorage.getItem('hideTodayPopup');
+    const todayStr = new Date().toDateString();
+
+    if (hideTodayValue !== todayStr) {
+      // Show popup after a short delay
+      setTimeout(() => {
+        homePopup.classList.add('active');
+      }, 800);
+    }
+
+    // Close handler
+    btnClosePopup.addEventListener('click', () => {
+      homePopup.classList.remove('active');
+    });
+
+    // Hide today handler
+    btnHideToday.addEventListener('click', () => {
+      localStorage.setItem('hideTodayPopup', todayStr);
+      homePopup.classList.remove('active');
+    });
+
+    // Close when clicking outside content
+    homePopup.addEventListener('click', (e) => {
+      if (e.target === homePopup) {
+        homePopup.classList.remove('active');
+      }
+    });
+  }
 });
