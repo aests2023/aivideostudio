@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="refresh" content="0; url=https://aicreateworkshop.web.app">
   <meta charset="utf-8">
   <title>페이지 이동 중...</title>
   <!-- 1. 구글 등 검색 엔진에게 대표 주소가 Firebase 호스팅임을 인지시킴 -->
   <link rel="canonical" href="https://aicreateworkshop.web.app/">
-  <!-- 2. 브라우저 자동 새로고침(새 주소로 이동) -->
+  <!-- 2. 브라우저 자동 새로고침(안전장치 폴백용) -->
   <meta http-equiv="refresh" content="0; url=https://aicreateworkshop.web.app/">
   
   <script>
     (function() {
-      // 깃허브 특유의 하위 폴더 경로(/aivideostudio)를 떼어내고 Firebase 주소와 결합
-      var newPath = window.location.pathname.replace("/aivideostudio", "");
+      // 깃허브 페이지의 첫 번째 경로(저장소 이름)를 자동으로 감지해서 제거합니다.
+      var pathParts = window.location.pathname.split('/').filter(Boolean);
+      
+      // 첫 번째 파트(저장소 이름)를 제외한 나머지 경로들을 결합합니다.
+      var newPath = "/" + pathParts.slice(1).join('/');
+      
+      // 최종 Firebase 대상 URL 조립
       var targetUrl = "https://aicreateworkshop.web.app" + newPath + window.location.search + window.location.hash;
+      
+      // 화면 전환
       window.location.replace(targetUrl);
     })();
   </script>
