@@ -29,11 +29,19 @@
       <nav>
         <ul class="nav-menu" id="navMenu">
           <li><a href="index.html" class="nav-link active">HOME</a></li>
-          <li><a href="services.html" class="nav-link">서비스</a></li>
-          <li><a href="portfolio.html" class="nav-link">포트폴리오</a></li>
-          <li><a href="process.html" class="nav-link">제작과정</a></li>
-          <li><a href="pricing.html" class="nav-link">가격안내</a></li>
+          <li class="dropdown">
+            <a href="services.html" class="nav-link">제작안내 ▾</a>
+            <ul class="dropdown-menu">
+              <li><a href="services.html" class="dropdown-link">서비스 소개</a></li>
+              <li><a href="web.html" class="dropdown-link">홈페이지 제작</a></li>
+              <li><a href="portfolio.html" class="dropdown-link">포트폴리오</a></li>
+              <li><a href="process.html" class="dropdown-link">제작과정</a></li>
+              <li><a href="pricing.html" class="dropdown-link">가격안내</a></li>
+            </ul>
+          </li>
           <li><a href="event.html" class="nav-link">이벤트</a></li>
+          <li><a href="notice.html" class="nav-link">공지사항</a></li>
+          <li><a href="login.html" class="nav-link">로그인</a></li>
           <li><a href="contact.html" class="nav-link nav-cta">문의하기</a></li>
         </ul>
       </nav>
@@ -92,45 +100,55 @@
         </div>
         
         <div class="services-grid">
-          <div class="service-card">
+          <a href="services.html" class="service-card" style="text-decoration: none; cursor: pointer;">
             <div class="service-icon">🎬</div>
             <h3 class="service-title">AI 광고 영상</h3>
             <ul class="service-list">
-              <li class="service-item">제품 광고 및 홍보</li>
-              <li class="service-item">브랜드 컨셉 무비</li>
-              <li class="service-item">소셜 미디어 타겟 광고</li>
+              <li class="service-item">브랜드 광고 및 홍보</li>
+              <li class="service-item">시네마틱 감성 무비</li>
+              <li class="service-item">소셜미디어 타겟 광고</li>
             </ul>
-          </div>
+          </a>
           
-          <div class="service-card">
+          <a href="services.html" class="service-card" style="text-decoration: none; cursor: pointer;">
             <div class="service-icon">📱</div>
             <h3 class="service-title">쇼츠 제작</h3>
             <ul class="service-list">
               <li class="service-item">유튜브 쇼츠 브랜딩</li>
-              <li class="service-item">인스타 릴스 제작</li>
-              <li class="service-item">틱톡 트렌드 반영 영상</li>
+              <li class="service-item">인스타그램 릴스 제작</li>
+              <li class="service-item">틱톡 바이럴 비디오</li>
             </ul>
-          </div>
+          </a>
           
-          <div class="service-card">
+          <a href="services.html" class="service-card" style="text-decoration: none; cursor: pointer;">
             <div class="service-icon">🎨</div>
             <h3 class="service-title">3D 애니메이션</h3>
             <ul class="service-list">
-              <li class="service-item">감성 스토리텔링 애니</li>
-              <li class="service-item">캐릭터 기반 인트로</li>
+              <li class="service-item">감성 스토리텔링 제작</li>
+              <li class="service-item">캐릭터 인트로 영상</li>
               <li class="service-item">동화풍 감성 렌더링</li>
             </ul>
-          </div>
+          </a>
           
-          <div class="service-card">
+          <a href="services.html" class="service-card" style="text-decoration: none; cursor: pointer;">
             <div class="service-icon">🎵</div>
             <h3 class="service-title">뮤직비디오</h3>
             <ul class="service-list">
-              <li class="service-item">감성 뮤직비디오 제작</li>
-              <li class="service-item">CCM 영상</li>
-              <li class="service-item">아티스트 홍보 영상</li>
+              <li class="service-item">시네마틱 뮤비 제작</li>
+              <li class="service-item">CCM 찬양 영상</li>
+              <li class="service-item">아티스트 프로모션</li>
             </ul>
-          </div>
+          </a>
+          
+          <a href="web.html" class="service-card" style="text-decoration: none; cursor: pointer;">
+            <div class="service-icon">🖥️</div>
+            <h3 class="service-title">홈페이지 제작</h3>
+            <ul class="service-list">
+              <li class="service-item">브랜드 랜딩페이지</li>
+              <li class="service-item">비디오 배경 홈페이지</li>
+              <li class="service-item">반응형 모바일 디자인</li>
+            </ul>
+          </a>
         </div>
         <div style="text-align: center; margin-top: 3.5rem;">
           <a href="services.html" class="btn btn-primary">제작 서비스 상세 보기 ➔</a>
@@ -370,7 +388,8 @@
           <h4 class="footer-title">바로가기</h4>
           <div class="footer-links">
             <a href="index.html" class="footer-link">HOME</a>
-            <a href="services.html" class="footer-link">주요 서비스</a>
+            <a href="services.html" class="footer-link">주요 제작 서비스</a>
+            <a href="web.html" class="footer-link">홈페이지 제작</a>
             <a href="portfolio.html" class="footer-link">대표 포트폴리오</a>
             <a href="process.html" class="footer-link">제작 프로세스</a>
           </div>
@@ -387,7 +406,7 @@
       </div>
       
       <div class="footer-bottom">
-        <p>© 2026 AI 영상공방. All rights reserved.</p>
+        <p>© 2026 AI 영상공방. All rights reserved. <a href="admin.html" style="opacity: 0.3; margin-left: 10px; text-decoration: none; color: inherit;">Admin</a></p>
       </div>
     </div>
   </footer>
@@ -407,3 +426,4 @@
   <script src="./script.js"></script>
 </body>
 </html>
+

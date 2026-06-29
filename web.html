@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <script>
+    (function() {
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+                     || (window.innerWidth < 768);
+      if (isMobile) {
+        var path = window.location.pathname;
+        var page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+        window.location.href = 'm/' + page;
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI 영상공방 감성 홈페이지 제작 서비스. 고품질 AI 비주얼 영상과 현대적 반응형 디자인이 결합된 몰입형 웹사이트를 제작합니다.">
+  <title>홈페이지 제작 | AI 영상공방</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        AI 영상공방
+      </a>
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">HOME</a></li>
+          <li class="dropdown">
+            <a href="services.html" class="nav-link active">제작안내 ▾</a>
+            <ul class="dropdown-menu">
+              <li><a href="services.html" class="dropdown-link">서비스 소개</a></li>
+              <li><a href="web.html" class="dropdown-link active">홈페이지 제작</a></li>
+              <li><a href="portfolio.html" class="dropdown-link">포트폴리오</a></li>
+              <li><a href="process.html" class="dropdown-link">제작과정</a></li>
+              <li><a href="pricing.html" class="dropdown-link">가격안내</a></li>
+            </ul>
+          </li>
+          <li><a href="event.html" class="nav-link">이벤트</a></li>
+          <li><a href="notice.html" class="nav-link">공지사항</a></li>
+          <li><a href="login.html" class="nav-link">로그인</a></li>
+          <li><a href="contact.html" class="nav-link nav-cta">문의하기</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-toggle" id="mobileToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Subpage Hero -->
+    <section class="subpage-hero">
+      <div class="container">
+        <span class="section-tag">WEBSITE PRODUCTION</span>
+        <h1 class="subpage-hero-title">상상을 담는 공간,<br>감성 홈페이지 제작</h1>
+        <p class="subpage-hero-subtitle">
+          단순한 템플릿 웹사이트를 넘어, 브랜드의 독창적인 스토리와 철학을 시각화합니다.<br>
+          AI 영상공방의 감성 시네마틱 비주얼과 현대적이고 유려한 반응형 웹 디자인 기술을 결합하여<br>
+          방문자의 스크롤을 멈추게 하는 몰입형 홈페이지를 구현해 드립니다.
+        </p>
+      </div>
+    </section>
+
+    <!-- Subpage Content -->
+    <section class="subpage-content">
+      <div class="container">
+        
+        <!-- Service Block 1 -->
+        <div class="service-detail-block" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center; margin-bottom: 6rem; padding-bottom: 4rem; border-bottom: 1px solid var(--color-border);">
+          <div style="background-color: var(--color-bg-muted); padding: 3rem; border-radius: var(--border-radius-md); text-align: center; border: 1px solid var(--color-border);">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem;">🖥️</div>
+            <h2 class="serif" style="font-size: 1.8rem; color: var(--color-primary); margin-bottom: 1rem;">브랜드 랜딩페이지</h2>
+            <span class="text-accent" style="font-size: 0.9rem; font-weight: 600; letter-spacing: 1px;">BRANDING LANDING PAGE</span>
+          </div>
+          <div>
+            <h3 class="serif" style="font-size: 1.4rem; margin-bottom: 1.2rem; color: var(--color-primary);">단 하나의 스크롤로 선사하는 압도적인 브랜드 경험</h3>
+            <p style="font-size: 0.95rem; color: var(--color-secondary); line-height: 1.7; margin-bottom: 1.5rem; font-weight: 300; word-break: keep-all;">
+              신제품 런칭, 단일 서비스 홍보, 사전 예약 및 프로모션 등에 최적화된 고성능 원페이지 사이트입니다. AI 영상공방에서 맞춤 기획·제작한 고해상도 AI 배경 영상을 전면 헤더와 주요 세션에 자연스럽게 접목하여 시선을 사로잡고 이탈을 최소화합니다.
+            </p>
+            <ul style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; font-size: 0.9rem; color: var(--color-primary); font-weight: 400;">
+              <li>✓ 원페이지 스크롤 인터페이스</li>
+              <li>✓ 감성 시네마틱 비디오 배경</li>
+              <li>✓ 고효율 고객 행동 유도(CTA) 설계</li>
+              <li>✓ 직관적인 정보 전달 구조</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Service Block 2 -->
+        <div class="service-detail-block" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; padding-bottom: 4rem; border-bottom: 1px solid var(--color-border);">
+          <div>
+            <h3 class="serif" style="font-size: 1.4rem; margin-bottom: 1.2rem; color: var(--color-primary);">어떠한 기기 화면에서도 품격 있게 반응하는 그리드</h3>
+            <p style="font-size: 0.95rem; color: var(--color-secondary); line-height: 1.7; margin-bottom: 1.5rem; font-weight: 300; word-break: keep-all;">
+              기업 정보, 사업 안내, 멤버 소개, 그리고 정교하게 구성된 포트폴리오를 우아하게 나열하는 멀티페이지 브랜드 사이트입니다. 데스크톱 대화면부터 스마트폰, 태블릿에 이르기까지 깨짐 없고 매끄러운 유동형 레이아웃과 감성적인 타이포그래피를 자랑합니다.
+            </p>
+            <ul style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; font-size: 0.9rem; color: var(--color-primary); font-weight: 400;">
+              <li>✓ 완벽한 모바일-태블릿 반응형</li>
+              <li>✓ 포트폴리오 아카이빙 갤러리</li>
+              <li>✓ 검색 엔진 최적화(SEO) 코딩</li>
+              <li>✓ 직관적 네비게이션 경험</li>
+            </ul>
+          </div>
+          <div style="background-color: var(--color-bg-muted); padding: 3rem; border-radius: var(--border-radius-md); text-align: center; border: 1px solid var(--color-border); order: -1;">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem;">📁</div>
+            <h2 class="serif" style="font-size: 1.8rem; color: var(--color-primary); margin-bottom: 1rem;">기업 & 포트폴리오 웹</h2>
+            <span class="text-accent" style="font-size: 0.9rem; font-weight: 600; letter-spacing: 1px;">CORPORATE & PORTFOLIO</span>
+          </div>
+        </div>
+
+        <!-- Service Block 3 -->
+        <div class="service-detail-block" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center; margin-bottom: 6rem; padding-bottom: 4rem; border-bottom: 1px solid var(--color-border);">
+          <div style="background-color: var(--color-bg-muted); padding: 3rem; border-radius: var(--border-radius-md); text-align: center; border: 1px solid var(--color-border);">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem;">✨</div>
+            <h2 class="serif" style="font-size: 1.8rem; color: var(--color-primary); margin-bottom: 1rem;">인터랙티브 웹 아트</h2>
+            <span class="text-accent" style="font-size: 0.9rem; font-weight: 600; letter-spacing: 1px;">INTERACTIVE WEB ART</span>
+          </div>
+          <div>
+            <h3 class="serif" style="font-size: 1.4rem; margin-bottom: 1.2rem; color: var(--color-primary);">사용자의 행동에 유려하게 반응하는 감각적 모션</h3>
+            <p style="font-size: 0.95rem; color: var(--color-secondary); line-height: 1.7; margin-bottom: 1.5rem; font-weight: 300; word-break: keep-all;">
+              스크롤 인터랙션, 마우스 트래킹 애니메이션, 페이드인 모션 등 사이트 곳곳에 시각적 즐거움을 주는 마이크로 마이크로인터랙션을 설계하여 완성도를 높입니다. 단순히 정보를 읽는 공간을 넘어 웹스페이스 자체를 하나의 감각적인 아트로 만들어 냅니다.
+            </p>
+            <ul style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; font-size: 0.9rem; color: var(--color-primary); font-weight: 400;">
+              <li>✓ 스크롤 매직 모션 & 트랜지션</li>
+              <li>✓ 마이크로 인터랙션 버튼 효과</li>
+              <li>✓ 웹 캔버스 입자 시뮬레이션</li>
+              <li>✓ 커스텀 크리에이티브 프레임워크</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Why Choose Us -->
+        <div style="max-width: 900px; margin: 0 auto 6rem auto; padding-top: 4rem;">
+          <h2 class="serif" style="text-align: center; font-size: 2rem; margin-bottom: 3.5rem; color: var(--color-primary);">AI 영상공방의 차별화된 개발 강점</h2>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+            <div>
+              <h3 class="serif" style="font-size: 1.2rem; color: var(--color-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.6rem;">
+                🎥 고품질 영상 시너지
+              </h3>
+              <p style="font-size: 0.92rem; color: var(--color-secondary); line-height: 1.7; font-weight: 300; word-break: keep-all;">
+                이미지 위주의 일반 사이트들과 달리, 공방이 직접 연출·제작한 감성적이고 수려한 AI 영상을 웹사이트 배경 및 오브젝트로 풍부하게 결합하여 압도적인 첫인상을 남깁니다.
+              </p>
+            </div>
+            <div>
+              <h3 class="serif" style="font-size: 1.2rem; color: var(--color-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.6rem;">
+                ⚡ 초고속 로딩 최적화
+              </h3>
+              <p style="font-size: 0.92rem; color: var(--color-secondary); line-height: 1.7; font-weight: 300; word-break: keep-all;">
+                동영상 리소스를 다수 사용하더라도 끊김이 없도록 최신 비디오 포맷(WebM/H.265) 사용, 레이지 로딩(Lazy Loading) 및 리소스 압축 기술을 철저히 설계하여 모바일에서도 버벅임 없이 쾌적한 사용성을 유지합니다.
+              </p>
+            </div>
+            <div>
+              <h3 class="serif" style="font-size: 1.2rem; color: var(--color-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.6rem;">
+                🔍 완벽한 검색 최적화 (SEO)
+              </h3>
+              <p style="font-size: 0.92rem; color: var(--color-secondary); line-height: 1.7; font-weight: 300; word-break: keep-all;">
+                웹 표준에 기반한 시맨틱 태그 구조 설계와 메타 태그 최적화를 통해 구글, 네이버 등 주요 포털 검색 엔진 봇이 사이트를 정확하게 수집하도록 만들어 브랜드 검색 노출 지수를 빠르게 확보합니다.
+              </p>
+            </div>
+            <div>
+              <h3 class="serif" style="font-size: 1.2rem; color: var(--color-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.6rem;">
+                🛠️ 런칭 후 손쉬운 유지보수
+              </h3>
+              <p style="font-size: 0.92rem; color: var(--color-secondary); line-height: 1.7; font-weight: 300; word-break: keep-all;">
+                코드를 모르는 비전문가도 런칭 후 간단한 텍스트 수정, 갤러리 이미지 변경 등을 직접 진행하실 수 있도록 체계적으로 주석 처리된 직관적 마크업과 손쉬운 수동 매뉴얼을 함께 제공합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subpage Action Box -->
+        <div class="subpage-action-box">
+          <h3 class="subpage-action-title">브랜드의 품격에 걸맞은 홈페이지를 지어 보세요</h3>
+          <p class="subpage-action-desc">웹사이트 기획안이 없어도 좋습니다. 러프한 텍스트 한 구절만 주시면 완벽한 구조로 구체화하여 개발해 드립니다.</p>
+          <a href="contact.html" class="btn btn-primary">무료 홈페이지 기획 상담 신청하기</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-layout">
+        <div class="footer-info">
+          <div class="footer-logo">AI 영상공방</div>
+          <p class="footer-desc">AI 제작 기법 and 디테일한 편집으로 깊은 울림을 주는 고품질 영상 콘텐츠를 기획·제작합니다.</p>
+        </div>
+        
+        <div class="footer-links-column">
+          <h4 class="footer-title">바로가기</h4>
+          <div class="footer-links">
+            <a href="index.html" class="footer-link">HOME</a>
+            <a href="services.html" class="footer-link">주요 제작 서비스</a>
+            <a href="web.html" class="footer-link">홈페이지 제작</a>
+            <a href="portfolio.html" class="footer-link">대표 포트폴리오</a>
+            <a href="process.html" class="footer-link">제작 프로세스</a>
+          </div>
+        </div>
+        
+        <div class="footer-links-column">
+          <h4 class="footer-title">고객 안내</h4>
+          <div class="footer-links">
+            <a href="pricing.html" class="footer-link">이용 요금</a>
+            <a href="https://blog.naver.com/ggailab" target="_blank" rel="noopener noreferrer" class="footer-link">공방 소식</a>
+            <a href="contact.html" class="footer-link">무료 상담 센터</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2026 AI 영상공방. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>
+
+
+

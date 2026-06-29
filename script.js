@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   let activeClickedCard = null;
-  
+
   // 1. Header Scroll Styling
   const header = document.querySelector('.header');
   window.addEventListener('scroll', () => {
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Mobile Menu Toggle
   const mobileToggle = document.getElementById('mobileToggle');
   const navMenu = document.getElementById('navMenu');
-  
+
   if (mobileToggle && navMenu) {
     mobileToggle.addEventListener('click', () => {
       mobileToggle.classList.toggle('active');
@@ -99,14 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 5. Portfolio "Play on Hover" Film Simulation
   const portfolioCards = document.querySelectorAll('.portfolio-card');
-  
+
   portfolioCards.forEach(card => {
     // data-preview 속성이 없는 카드는 호버 프리뷰 설정을 건너뜀 (인라인 iframe 직접 재생용)
     const previewType = card.getAttribute('data-preview');
     if (!previewType) return;
 
     const mediaContainer = card.querySelector('.portfolio-media');
-    
+
     // Create elements for video preview simulation
     const overlay = document.createElement('div');
     overlay.className = 'simulation-overlay';
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
       text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
       background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.4) 100%);
     `;
-    
+
     // Header overlay: Blink indicator and text
     const topBar = document.createElement('div');
     topBar.style.cssText = `
@@ -139,10 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
       align-items: center;
       width: 100%;
     `;
-    
+
     const recDotWrapper = document.createElement('div');
     recDotWrapper.style.cssText = 'display: flex; align-items: center; gap: 0.4rem;';
-    
+
     const recDot = document.createElement('span');
     recDot.style.cssText = `
       width: 8px;
@@ -152,22 +152,22 @@ document.addEventListener('DOMContentLoaded', () => {
       display: inline-block;
       animation: blink 1s infinite alternate;
     `;
-    
+
     const recText = document.createElement('span');
     recText.innerText = 'PREVIEW';
     recText.style.fontWeight = 'bold';
     recText.style.letterSpacing = '1px';
-    
+
     recDotWrapper.appendChild(recDot);
     recDotWrapper.appendChild(recText);
-    
+
     const resText = document.createElement('span');
     resText.innerText = card.classList.contains('vertical') ? '9:16 vertical' : '16:9 4K';
     resText.style.opacity = '0.8';
-    
+
     topBar.appendChild(recDotWrapper);
     topBar.appendChild(resText);
-    
+
     // Bottom overlay: running timecode
     const bottomBar = document.createElement('div');
     bottomBar.style.cssText = `
@@ -175,11 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
       justify-content: space-between;
       width: 100%;
     `;
-    
+
     const timecodeVal = document.createElement('span');
     timecodeVal.innerText = '00:00:00:00';
     timecodeVal.style.fontSize = '0.85rem';
-    
+
     const qualityBadge = document.createElement('span');
     qualityBadge.innerText = 'AI GEN';
     qualityBadge.style.cssText = `
@@ -189,14 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
       font-size: 0.65rem;
       letter-spacing: 0.5px;
     `;
-    
+
     bottomBar.appendChild(timecodeVal);
     bottomBar.appendChild(qualityBadge);
-    
+
     overlay.appendChild(topBar);
     overlay.appendChild(bottomBar);
     mediaContainer.appendChild(overlay);
-    
+
     // Add Ken Burns and film grain animations to CSS on the fly
     if (!document.getElementById('simulation-animations')) {
       const styleSheet = document.createElement('style');
@@ -228,37 +228,37 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       document.head.appendChild(styleSheet);
     }
-    
+
     // Create film grain canvas
     const canvas = document.createElement('canvas');
     canvas.className = 'noise-canvas';
     canvas.style.opacity = '0';
     mediaContainer.appendChild(canvas);
-    
+
     let canvasInterval = null;
     const ctx = canvas.getContext('2d');
-    
+
     const startNoise = () => {
       canvas.width = mediaContainer.clientWidth;
       canvas.height = mediaContainer.clientHeight;
       canvas.style.opacity = '0.12';
-      
+
       canvasInterval = setInterval(() => {
         const w = canvas.width;
         const h = canvas.height;
         const imgData = ctx.createImageData(w, h);
         const data = imgData.data;
         const len = data.length;
-        
+
         for (let i = 0; i < len; i += 4) {
           const val = Math.random() * 255;
           data[i] = val;
-          data[i+1] = val;
-          data[i+2] = val;
-          data[i+3] = 45; // opacity
+          data[i + 1] = val;
+          data[i + 2] = val;
+          data[i + 3] = 45; // opacity
         }
         ctx.putImageData(imgData, 0, 0);
-        
+
         // Draw occasional horizontal glitch line
         if (Math.random() > 0.96) {
           ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }, 50);
     };
-    
+
     const stopNoise = () => {
       clearInterval(canvasInterval);
       canvas.style.opacity = '0';
@@ -275,13 +275,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hover timers
     let timer = null;
     let frames = 0;
-    
+
     card.addEventListener('mouseenter', () => {
       if (card.querySelector('iframe')) return;
       overlay.style.opacity = '1';
       card.classList.add('simulate-play');
       startNoise();
-      
+
       // Update timecode
       frames = 0;
       timer = setInterval(() => {
@@ -289,15 +289,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let f = frames % 30;
         let s = Math.floor(frames / 30) % 60;
         let m = Math.floor(frames / 1800) % 60;
-        
+
         const fStr = f.toString().padStart(2, '0');
         const sStr = s.toString().padStart(2, '0');
         const mStr = m.toString().padStart(2, '0');
-        
+
         timecodeVal.innerText = `00:${mStr}:${sStr}:${fStr}`;
       }, 133); // roughly 7.5 updates/sec, increments faster to look busy
     });
-    
+
     card.addEventListener('mouseleave', () => {
       if (card.querySelector('iframe')) return;
       overlay.style.opacity = '0';
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         // Stash reference to the clicked card
         activeClickedCard = card;
 
@@ -439,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const closeLightbox = () => {
             lightbox.style.opacity = '0';
             wrapper.style.transform = 'scale(0.95)';
-            
+
             // Smoothly scroll back to the active clicked card
             if (activeClickedCard) {
               activeClickedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -464,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Setup and show iframe
         const wrapper = lightbox.querySelector('.lightbox-wrapper');
         const container = lightbox.querySelector('.lightbox-container');
-        
+
         // Remove old iframe if any
         const oldIframe = container.querySelector('iframe');
         if (oldIframe) oldIframe.remove();
@@ -479,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
         iframe.style.cssText = "width: 100%; height: 100%; border: none; display: block;";
 
         container.appendChild(iframe);
-        
+
         // Display lightbox with animation
         lightbox.style.display = 'flex';
         // Force reflow
@@ -500,7 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!reviewTrack) return;
     currentSlide = index;
     reviewTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
-    
+
     sliderDots.forEach(dot => {
       if (parseInt(dot.getAttribute('data-index')) === currentSlide) {
         dot.classList.add('active');
@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 7. Consultation Form & Success Modal
   // 구글 스프레드시트 연동용 Apps Script Web App URL이 있을 경우 아래 공란에 붙여넣으세요.
   // 예시: 'https://script.google.com/macros/s/AKfycbwXYZ.../exec'
-  const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw7ewaBs1Cb8wUgkpaTe5qwLbpFntdt49NQN9yykiMwpI9I-EuxnYqCySgj00nQ5nJ0bA/exec';
+  const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxODU1sAOm8l-Ce0fz4jEDULzde6Edf0S9tI-b8oo6geQ_opB3Ibx__HlgW-9zJkfNBHg/exec';
 
   const consultationForm = document.getElementById('consultationForm');
   const successModal = document.getElementById('successModal');
@@ -554,19 +554,19 @@ document.addEventListener('DOMContentLoaded', () => {
   if (consultationForm && successModal && closeModalBtn) {
     consultationForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      
+
       // Basic validation check
       const clientName = document.getElementById('clientName').value.trim();
       const clientPhone = document.getElementById('clientPhone').value.trim();
       const clientEmail = document.getElementById('clientEmail').value.trim();
       const serviceType = document.getElementById('serviceType').value;
       const clientMessage = document.getElementById('clientMessage').value.trim();
-      
+
       if (!clientName || !clientPhone || !clientEmail || !serviceType || !clientMessage) {
         alert('모든 필수 항목(*)을 채워주세요.');
         return;
       }
-      
+
       // 버튼 상태 로딩 중으로 변경
       const originalBtnText = submitBtn ? submitBtn.innerText : '무료 상담 신청하기';
       if (submitBtn) {
@@ -605,13 +605,13 @@ document.addEventListener('DOMContentLoaded', () => {
           mode: 'no-cors',
           body: formData
         })
-        .then(() => {
-          showSuccess();
-        })
-        .catch(err => {
-          console.error('스프레드시트 전송 실패:', err);
-          showSuccess(); // 네트워크 오류 등의 경우에도 예비 작동
-        });
+          .then(() => {
+            showSuccess();
+          })
+          .catch(err => {
+            console.error('스프레드시트 전송 실패:', err);
+            showSuccess(); // 네트워크 오류 등의 경우에도 예비 작동
+          });
       } else {
         // 주소가 비어있거나 스프레드시트 주소(docs.google.com)가 잘못 입력된 경우 경고 로그 출력 후 시뮬레이션 완료 처리
         if (GOOGLE_SHEET_WEB_APP_URL && GOOGLE_SHEET_WEB_APP_URL.includes('docs.google.com')) {
@@ -641,11 +641,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnClosePopup = document.getElementById('btnClosePopup');
 
   if (homePopup && btnHideToday && btnClosePopup) {
+    // Apply dynamic popup link and image if configured by administrator
+    const customPopupLink = localStorage.getItem('popupLink');
+    const customPopupImage = localStorage.getItem('popupImage');
+    const popupAnchor = homePopup.querySelector('a');
+    const popupImg = homePopup.querySelector('img');
+
+    if (popupAnchor && customPopupLink) {
+      popupAnchor.setAttribute('href', customPopupLink);
+    }
+    if (popupImg && customPopupImage) {
+      popupImg.setAttribute('src', customPopupImage);
+    }
+
     // Check localStorage if popup should be hidden today
     const hideTodayValue = localStorage.getItem('hideTodayPopup');
     const todayStr = new Date().toDateString();
+    const isPopupDisabledGlobally = localStorage.getItem('disablePopupGlobally') === 'true';
 
-    if (hideTodayValue !== todayStr) {
+    // Exposure duration validation
+    const popupStartDate = localStorage.getItem('popupStartDate');
+    const popupEndDate = localStorage.getItem('popupEndDate');
+    const now = new Date();
+    let isWithinExposurePeriod = true;
+
+    if (popupStartDate && now < new Date(popupStartDate)) {
+      isWithinExposurePeriod = false;
+    }
+    if (popupEndDate && now > new Date(popupEndDate)) {
+      isWithinExposurePeriod = false;
+    }
+
+    if (hideTodayValue !== todayStr && !isPopupDisabledGlobally && isWithinExposurePeriod) {
       // Show popup after a short delay
       setTimeout(() => {
         homePopup.classList.add('active');
@@ -669,5 +696,83 @@ document.addEventListener('DOMContentLoaded', () => {
         homePopup.classList.remove('active');
       }
     });
+  }
+
+  // 9. Dynamic Navigation Link Swap (Login -> Logout & MyPage/Admin)
+  const navMenuElement = document.getElementById('navMenu');
+  if (navMenuElement) {
+    const loadFirebaseScripts = () => {
+      return new Promise((resolve, reject) => {
+        if (window.firebase && window.auth) {
+          resolve();
+          return;
+        }
+        
+        const sApp = document.createElement('script');
+        sApp.src = "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js";
+        sApp.onload = () => {
+          const sAuth = document.createElement('script');
+          sAuth.src = "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js";
+          sAuth.onload = () => {
+            const isMobile = window.location.pathname.includes('/m/');
+            const sConfig = document.createElement('script');
+            sConfig.src = (isMobile ? "../" : "./") + "firebase-config.js?v=1.0.2";
+            sConfig.onload = () => {
+              resolve();
+            };
+            sConfig.onerror = reject;
+            document.head.appendChild(sConfig);
+          };
+          sAuth.onerror = reject;
+          document.head.appendChild(sAuth);
+        };
+        sApp.onerror = reject;
+        document.head.appendChild(sApp);
+      });
+    };
+
+    loadFirebaseScripts().then(() => {
+      auth.onAuthStateChanged((user) => {
+        const loginLink = navMenuElement.querySelector('a[href="login.html"]');
+        if (loginLink && loginLink.parentElement) {
+          const li = loginLink.parentElement;
+          
+          if (user) {
+            const isPageMobile = window.location.pathname.includes('/m/');
+            const dashboardPage = isAdmin(user.email) ? 'admin.html' : 'mypage.html';
+            const dashboardText = isAdmin(user.email) ? '관리자' : '마이페이지';
+            
+            // Check if current page is dashboard to apply active highlighting
+            const pathName = window.location.pathname;
+            const currentPageName = pathName.substring(pathName.lastIndexOf('/') + 1) || 'index.html';
+            const isActive = currentPageName.includes(dashboardPage);
+            const activeClass = isActive ? 'active' : '';
+
+            li.innerHTML = `<a href="${dashboardPage}" class="nav-link ${activeClass}">${dashboardText}</a>`;
+            
+            // Create and append logout link if it doesn't exist
+            let logoutLi = document.getElementById('navLogoutLi');
+            if (!logoutLi) {
+              logoutLi = document.createElement('li');
+              logoutLi.id = 'navLogoutLi';
+              logoutLi.innerHTML = `<a href="#" id="navLogoutBtn" class="nav-link">로그아웃</a>`;
+              li.parentNode.insertBefore(logoutLi, li.nextSibling);
+              
+              const logoutBtn = document.getElementById('navLogoutBtn');
+              if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  if (confirm("로그아웃 하시겠습니까?")) {
+                    auth.signOut().then(() => {
+                      window.location.reload();
+                    });
+                  }
+                });
+              }
+            }
+          }
+        }
+      });
+    }).catch(err => console.error("Firebase SDK loading failed:", err));
   }
 });
