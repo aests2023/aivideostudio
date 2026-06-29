@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <script>
+    (function() {
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+                     || (window.innerWidth < 768);
+      if (!isMobile) {
+        var path = window.location.pathname;
+        var page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+        window.location.href = '../' + page;
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI 영상공방의 공식 공지사항 및 새로운 소식을 안내드립니다. 모바일 버전.">
+  <title>공지사항 | AI 영상공방 모바일</title>
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .notice-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 0 10px;
+    }
+    .notice-container {
+      padding: 80px 15px 50px 15px;
+    }
+    .notice-list {
+      border-top: 2px solid var(--color-primary);
+      background-color: var(--color-white);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .notice-item {
+      border-bottom: 1px solid var(--color-border);
+    }
+    .notice-title-bar {
+      padding: 1.2rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .notice-title-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 1;
+      padding-right: 0.5rem;
+    }
+    .notice-subject {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      line-height: 1.4;
+      word-break: keep-all;
+    }
+    .notice-item.active .notice-subject {
+      color: var(--color-accent);
+    }
+    .notice-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 0.2rem;
+    }
+    .notice-num {
+      font-size: 0.75rem;
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+    .notice-date {
+      font-size: 0.75rem;
+      color: var(--color-secondary);
+    }
+    .notice-arrow {
+      font-size: 0.8rem;
+      color: var(--color-secondary);
+      transition: transform 0.3s ease;
+      margin-left: 0.5rem;
+    }
+    .notice-item.active .notice-arrow {
+      transform: rotate(180deg);
+      color: var(--color-accent);
+    }
+    .notice-content-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background-color: var(--color-bg-muted);
+    }
+    .notice-content-body {
+      padding: 1.25rem 1rem;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--color-secondary);
+      font-weight: 300;
+      border-top: 1px dashed var(--color-border);
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .notice-media-wrapper {
+      margin-top: 1rem;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      max-width: 100%;
+      background-color: #000;
+    }
+    .notice-detail-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .notice-link-wrapper {
+      margin-top: 1rem;
+    }
+    .notice-detail-link {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: var(--color-primary);
+      color: var(--color-white) !important;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border-radius: 4px;
+      transition: opacity 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+    .notice-detail-link:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        AI 영상공방
+      </a>
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">HOME</a></li>
+          <li class="dropdown">
+            <a href="#" class="nav-link dropdown-toggle">제작안내 ▾</a>
+            <ul class="dropdown-menu">
+              <li><a href="services.html" class="dropdown-link">서비스 소개</a></li>
+              <li><a href="web.html" class="dropdown-link">홈페이지 제작</a></li>
+              <li><a href="portfolio.html" class="dropdown-link">포트폴리오</a></li>
+              <li><a href="process.html" class="dropdown-link">제작과정</a></li>
+              <li><a href="pricing.html" class="dropdown-link">가격안내</a></li>
+            </ul>
+          </li>
+          <li><a href="event.html" class="nav-link">이벤트</a></li>
+          <li><a href="notice.html" class="nav-link active">공지사항</a></li>
+          <li><a href="login.html" class="nav-link">로그인</a></li>
+          <li><a href="contact.html" class="nav-link nav-cta">문의하기</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-toggle" id="mobileToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container notice-container">
+      <div class="notice-header">
+        <h1 class="serif" style="font-size: 1.8rem; color: var(--color-primary); margin-bottom: 0.5rem;">공지사항</h1>
+        <p style="color: var(--color-secondary); font-size: 0.85rem; font-weight: 300;">AI 영상공방의 새로운 뉴스와 공지 소식입니다.</p>
+      </div>
+
+      <div class="notice-list" id="noticeListContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-layout">
+        <div>
+          <div class="footer-logo">AI 영상공방</div>
+          <p class="footer-desc">AI 제작 기법과 디테일한 편집으로 깊은 울림을 주는 고품질 영상 콘텐츠를 기획·제작합니다.</p>
+        </div>
+        <div class="footer-links">
+          <h4 class="footer-title">바로가기</h4>
+          <a href="index.html" class="footer-link">HOME</a>
+          <a href="services.html" class="footer-link">주요 제작 서비스</a>
+          <a href="web.html" class="footer-link">홈페이지 제작</a>
+          <a href="portfolio.html" class="footer-link">대표 포트폴리오</a>
+          <a href="process.html" class="footer-link">제작 프로세스</a>
+          <a href="pricing.html" class="footer-link">이용 요금</a>
+          <a href="notice.html" class="footer-link">공지사항</a>
+          <a href="contact.html" class="footer-link">무료 상담 센터</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 AI 영상공방. All rights reserved. <a href="admin.html" style="opacity: 0.3; margin-left: 10px; text-decoration: none; color: inherit;">Admin</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const noticeListContainer = document.getElementById('noticeListContainer');
+
+      // Default Notices if empty
+      const defaultNotices = [
+        {
+          id: 2,
+          title: "[이벤트] 홈페이지 제작 서비스 런칭 기념 10% 즉시 할인 프로모션",
+          date: "2026-06-27",
+          content: "안녕하세요, AI 영상공방입니다.\n\n고객님들의 비즈니스 성장을 다방면으로 지원하기 위해 신규 제작 패키지인 '홈페이지 제작' 서비스를 공식 런칭했습니다!\n\n이를 기념하여 7월 한 달간 홈페이지 제작을 의뢰 주시는 선착순 10분께 10% 할인 혜택을 제공하오니 많은 성원 부탁드립니다.\n\n감사합니다."
+        },
+        {
+          id: 1,
+          title: "[공지] AI 영상공방 공식 홈페이지 오픈 안내",
+          date: "2026-06-25",
+          content: "안녕하세요, AI 영상공방입니다.\n\n인공지능 시네마틱 기법과 트렌디한 편집 기법을 결합하여 고품질의 프리미엄 영상물을 제작하는 'AI 영상공방'의 공식 홈페이지가 정식 오픈하였습니다.\n\n광고 제작부터 쇼츠, 3D 애니메이션, 뮤직비디오까지 다양한 영상 프로젝트 견적과 무료 기획안을 상담 받아 보세요.\n\n앞으로 알찬 소식과 혜택으로 찾아뵙겠습니다. 감사합니다."
+        }
+      ];
+
+      let storedNotices = localStorage.getItem('notices');
+      let notices = [];
+
+      if (storedNotices) {
+        try {
+          notices = JSON.parse(storedNotices);
+        } catch(e) {
+          console.error(e);
+          notices = defaultNotices;
+        }
+      } else {
+        notices = defaultNotices;
+        localStorage.setItem('notices', JSON.stringify(defaultNotices));
+      }
+
+      // Render Notices
+      if (notices.length === 0) {
+        noticeListContainer.innerHTML = '<div style="text-align: center; color: var(--color-secondary); padding: 3rem 0; font-size: 0.9rem;">등록된 공지사항이 없습니다.</div>';
+      } else {
+        noticeListContainer.innerHTML = '';
+        notices.forEach((item, index) => {
+          const itemEl = document.createElement('div');
+          itemEl.className = 'notice-item';
+
+          const imageHtml = item.image ? `<div class="notice-media-wrapper"><img src="${item.image}" alt="공지 이미지" class="notice-detail-img"></div>` : '';
+          const youtubeHtml = item.youtube ? `<div class="notice-media-wrapper video-container"><iframe src="https://www.youtube.com/embed/${item.youtube}" frameborder="0" allowfullscreen></iframe></div>` : '';
+          const linkHtml = item.link ? `<div class="notice-link-wrapper"><a href="${item.link}" target="_blank" class="notice-detail-link">링크 바로가기 ↗</a></div>` : '';
+
+          itemEl.innerHTML = `
+            <div class="notice-title-bar">
+              <div class="notice-title-left">
+                <span class="notice-subject">${item.title}</span>
+                <div class="notice-meta">
+                  <span class="notice-num">No. ${notices.length - index}</span>
+                  <span class="notice-date">${item.date}</span>
+                </div>
+              </div>
+              <span class="notice-arrow">▼</span>
+            </div>
+            <div class="notice-content-panel">
+              <div class="notice-content-body">${item.content}${imageHtml}${youtubeHtml}${linkHtml}</div>
+            </div>
+          `;
+          noticeListContainer.appendChild(itemEl);
+        });
+
+        // Setup accordion click handler
+        const noticeItems = document.querySelectorAll('.notice-item');
+        noticeItems.forEach(item => {
+          const titleBar = item.querySelector('.notice-title-bar');
+          const panel = item.querySelector('.notice-content-panel');
+          const body = item.querySelector('.notice-content-body');
+
+          titleBar.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            
+            noticeItems.forEach(otherItem => {
+              if (otherItem !== item && otherItem.classList.contains('active')) {
+                otherItem.classList.remove('active');
+                otherItem.querySelector('.notice-content-panel').style.maxHeight = '0';
+              }
+            });
+
+            if (isActive) {
+              item.classList.remove('active');
+              panel.style.maxHeight = '0';
+            } else {
+              item.classList.add('active');
+              panel.style.maxHeight = body.scrollHeight + 'px';
+            }
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+

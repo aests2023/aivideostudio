@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <script>
+    (function () {
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        || (window.innerWidth < 768);
+      if (!isMobile) {
+        var path = window.location.pathname;
+        var page = path.substring(path.lastIndexOf('/') + 1) || 'admin.html';
+        window.location.href = '../' + page;
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI 영상공방 모바일 관리자 시스템.">
+  <title>관리자 콘솔 | AI 영상공방 모바일</title>
+  <link rel="stylesheet" href="./styles.css">
+  <!-- Firebase SDK Compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="../firebase-config.js?v=1.0.2"></script>
+  <style>
+    body {
+      background-color: #12100E;
+      color: #E6E1DC;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .admin-container {
+      padding: 70px 15px 30px 15px;
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-title {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      color: var(--color-primary);
+    }
+
+    /* Stats Layout */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+      background: rgba(30, 27, 24, 0.7);
+      border: 1px solid rgba(200, 142, 114, 0.12);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--color-secondary);
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-val {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    /* Controls */
+    .filter-panel {
+      background: rgba(30, 27, 24, 0.7);
+      border: 1px solid rgba(200, 142, 114, 0.12);
+      border-radius: 10px;
+      padding: 1.25rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .mobile-input {
+      background: rgba(20, 18, 16, 0.8);
+      border: 1px solid rgba(200, 142, 114, 0.2);
+      color: #FFF;
+      padding: 0.7rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      width: 100%;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    .mobile-input:focus {
+      border-color: var(--color-accent);
+    }
+
+    /* Inquiries list cards */
+    .inquiry-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .inquiry-card {
+      background: rgba(30, 27, 24, 0.7);
+      border: 1px solid rgba(200, 142, 114, 0.12);
+      border-radius: 10px;
+      padding: 1.25rem;
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #FFF;
+    }
+
+    .card-date {
+      font-size: 0.75rem;
+      color: var(--color-secondary);
+    }
+
+    .card-row {
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+      color: #D2CBC4;
+    }
+
+    .card-label {
+      color: var(--color-secondary);
+      margin-right: 0.5rem;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.05);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .badge-wait {
+      background-color: rgba(226, 76, 76, 0.15);
+      color: #E24C4C;
+      border: 1px solid rgba(226, 76, 76, 0.3);
+    }
+
+    .badge-ing {
+      background-color: rgba(222, 178, 91, 0.15);
+      color: #DEB25B;
+      border: 1px solid rgba(222, 178, 91, 0.3);
+    }
+
+    .badge-done {
+      background-color: rgba(94, 186, 125, 0.15);
+      color: #5EBA7D;
+      border: 1px solid rgba(94, 186, 125, 0.3);
+    }
+
+    /* Switches */
+    .switch-panel {
+      background: rgba(30, 27, 24, 0.7);
+      border: 1px solid rgba(200, 142, 114, 0.12);
+      border-radius: 10px;
+      padding: 1.25rem 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .switch-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .switch-label {
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .switch-desc {
+      font-size: 0.75rem;
+      color: var(--color-secondary);
+      margin-top: 0.2rem;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #38322C;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: #FFF;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: var(--color-accent, #C88E72);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Overlay login screen for mobile */
+    .login-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(18, 16, 14, 0.97);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .login-card {
+      background: rgba(30, 27, 24, 0.8);
+      border: 1px solid rgba(200, 142, 114, 0.2);
+      border-radius: 12px;
+      padding: 2.5rem 1.5rem;
+      width: 85%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Details modal */
+    .admin-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(18, 16, 14, 0.85);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .admin-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .admin-modal-content {
+      background: #1E1B18;
+      border: 1px solid rgba(200, 142, 114, 0.2);
+      width: 90%;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .admin-modal-header {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-modal-body {
+      padding: 1.25rem 1rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    .modal-label {
+      font-size: 0.75rem;
+      color: var(--color-secondary);
+      margin-bottom: 0.2rem;
+      display: block;
+    }
+
+    .modal-value {
+      color: #FFF;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      word-break: break-all;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.05);
+    }
+
+    .action-btn-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Auth Checking Loading Overlay -->
+  <div id="authOverlay" class="login-overlay" style="display: flex; opacity: 1; transition: opacity 0.4s ease; background-color: #12100E; z-index: 9999; flex-direction: column; justify-content: center; align-items: center;">
+    <div style="text-align: center;">
+      <div style="font-family: var(--font-serif); font-size: 1.5rem; color: #FFF; margin-bottom: 0.5rem;">AI 영상공방</div>
+      <div style="color: var(--color-accent); font-size: 0.8rem; letter-spacing: 1px;">보안 계정 세션 확인 중...</div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        AI 영상공방 <span
+          style="font-size:0.65rem; color:var(--color-accent); font-weight:bold; margin-left:0.3rem;">관리자</span>
+      </a>
+      <button id="logoutBtn"
+        style="background:none; border:1px solid rgba(226, 76, 76, 0.4); color:#E24C4C; padding:0.3rem 0.6rem; border-radius:4px; font-size:0.75rem; cursor:pointer;">로그아웃</button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <div class="admin-header">
+      <h1 class="admin-title">관리자 대시보드</h1>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-label">누적 문의</div>
+        <div id="statTotal" class="stat-val">28건</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">대기 상담</div>
+        <div id="statWait" class="stat-val" style="color:#E24C4C;">3건</div>
+      </div>
+    </div>
+
+    <!-- Popup Controls & Customizer -->
+    <div class="switch-panel">
+      <div class="switch-container" style="padding-bottom: 1rem; border-bottom: 1px dashed rgba(255, 255, 255, 0.08);">
+        <div>
+          <div class="switch-label">전사 메인 팝업</div>
+          <div class="switch-desc">메인화면 팝업 공지를 켜고 끕니다.</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleMainPopup" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="switch-container" style="padding: 1rem 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.08);">
+        <div style="width: 100%;">
+          <div class="switch-label">구글 스프레드시트 동기화</div>
+          <div id="syncStatusDesc" class="switch-desc" style="margin-bottom: 0.75rem;">동기화 상태 확인 중...</div>
+          <a href="https://docs.google.com/spreadsheets/d/1g30Df43YiYlDmZNHIkuZHEG1htKbigtkQUbrxfXSeH4/edit?gid=0#gid=0"
+            target="_blank" rel="noopener noreferrer" class="btn btn-outline"
+            style="display: block; text-align: center; font-size: 0.8rem; padding: 0.5rem; text-decoration: none;">
+            구글 스프레드시트 열기 ➔
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.25rem;">
+        <div class="switch-label" style="margin-bottom: 0.75rem;">팝업 콘텐츠 설정</div>
+
+        <div style="margin-bottom: 0.75rem;">
+          <span class="modal-label">팝업 배너 이미지 경로</span>
+          <input type="text" id="popupImageInput" class="mobile-input" placeholder="예: ./assets/popup.png 또는 외부 URL">
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <span class="modal-label">팝업 클릭 시 이동 링크</span>
+          <input type="text" id="popupLinkInput" class="mobile-input" placeholder="예: event.html 또는 외부 URL">
+        </div>
+
+        <div style="margin-bottom: 0.75rem; text-align: left;">
+          <span class="modal-label" style="font-size: 0.75rem;">노출 시작 일시 설정</span>
+          <div style="display: flex; gap: 0.25rem;">
+            <select id="startYear" class="mobile-input"
+              style="flex: 1.5; padding: 0.5rem 0.2rem; font-size: 0.75rem; text-align: center; min-width: 0; box-sizing: border-box;"></select>
+            <select id="startMonth" class="mobile-input"
+              style="flex: 1; padding: 0.5rem 0.2rem; font-size: 0.75rem; text-align: center; min-width: 0; box-sizing: border-box;"></select>
+            <select id="startDay" class="mobile-input"
+              style="flex: 1; padding: 0.5rem 0.2rem; font-size: 0.75rem; text-align: center; min-width: 0; box-sizing: border-box;"></select>
+            <select id="startHour" class="mobile-input"
+              style="flex: 1; padding: 0.5rem 0.2rem; font-size: 0.75rem; text-align: center; min-width: 0; box-sizing: border-box;"></select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1rem; text-align: left;">
+          <span class="modal-label" style="font-size: 0.75rem;">노출 종료 일시 설정</span>
+          <div style="display: flex; gap: 0.25rem;">
+            <select id="endYear" class="mobile-input"
+              style="flex: 1.5; padding: 0.5rem 0.2rem; font-size: 0.75rem; text-align: center; min-width: 0; box-sizing: border-box;"></select>
+            <select id="endMonth" class="mobile-input"
+              style="flex: 1; padding: 0.5rem 0.2rem; font-size: 0.75rem; text-align: center; min-width: 0; box-sizing: border-box;"></select>
+            <select id="endDay" class="mobile-input"
+              style="flex: 1; padding: 0.5rem 0.2rem; font-size: 0.75rem; text-align: center; min-width: 0; box-sizing: border-box;"></select>
+            <select id="endHour" class="mobile-input"
+              style="flex: 1; padding: 0.5rem 0.2rem; font-size: 0.75rem; text-align: center; min-width: 0; box-sizing: border-box;"></select>
+          </div>
+        </div>
+
+        <button id="savePopupConfigBtn" class="btn btn-primary"
+          style="width: 100%; padding: 0.65rem; font-size: 0.85rem; letter-spacing: 0.5px;">
+          팝업 설정 저장하기
+        </button>
+        <div id="popupSaveStatus"
+          style="font-size: 0.75rem; color: #5EBA7D; margin-top: 0.5rem; display: none; text-align: center; font-weight: 500;">
+          ✓ 설정이 저장되었습니다.</div>
+
+        <button id="resetHideTodayBtn" class="btn btn-outline"
+          style="width: 100%; padding: 0.65rem; font-size: 0.85rem; margin-top: 0.5rem; border-color: rgba(200, 142, 114, 0.3); color: var(--color-primary); letter-spacing: 0.5px;">
+          내 PC '오늘 하루 보지 않기' 설정 해제
+        </button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-panel">
+      <div class="filter-group">
+        <input type="text" id="searchKeyword" class="mobile-input" placeholder="이름 또는 연락처 검색">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+          <select id="filterService" class="mobile-input">
+            <option value="all">전체 서비스</option>
+            <option value="ad">AI 광고 영상</option>
+            <option value="web">홈페이지 제작</option>
+            <option value="shorts">쇼츠 제작</option>
+            <option value="animation">3D 애니메이션</option>
+            <option value="ccm">뮤직비디오</option>
+            <option value="etc">기타/대기</option>
+          </select>
+          <select id="filterStatus" class="mobile-input">
+            <option value="all">전체 상태</option>
+            <option value="wait">상담 대기</option>
+            <option value="ing">상담 중</option>
+            <option value="done">상담 완료</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards List -->
+    <div class="inquiry-list" id="inquiryList">
+      <!-- Rendered dynamically -->
+    </div>
+
+    <!-- Notice Manager Panel -->
+    <div class="filter-panel" style="margin-top: 2rem;">
+      <h2 class="serif" style="font-size: 1.3rem; color: var(--color-primary); margin-bottom: 1.25rem;">공지사항 관리</h2>
+
+      <!-- Add Notice Form -->
+      <div style="margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px dashed rgba(255, 255, 255, 0.1);">
+        <h3 class="serif" style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 0.75rem;">신규 공지 작성</h3>
+        <form id="addNoticeForm">
+          <div style="margin-bottom: 0.75rem;">
+            <span class="modal-label">공지 제목</span>
+            <input type="text" id="newNoticeTitle" class="mobile-input" placeholder="공지 제목 입력" required>
+          </div>
+          <div style="margin-bottom: 0.75rem;">
+            <span class="modal-label">공지 본문 내용</span>
+            <textarea id="newNoticeContent" class="mobile-input"
+              style="height: 100px; resize: vertical; line-height: 1.5; font-family: inherit;" placeholder="공지 본문 내용 입력"
+              required></textarea>
+          </div>
+          <div style="margin-bottom: 0.75rem;">
+            <span class="modal-label">이미지 주소 (선택)</span>
+            <input type="text" id="newNoticeImage" class="mobile-input" placeholder="예: ../assets/logo.png">
+          </div>
+          <div style="margin-bottom: 0.75rem;">
+            <span class="modal-label">유튜브 동영상 ID (선택)</span>
+            <input type="text" id="newNoticeYoutube" class="mobile-input" placeholder="예: dQw4w9WgXcQ">
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <span class="modal-label">링크 바로가기 URL (선택)</span>
+            <input type="text" id="newNoticeLink" class="mobile-input" placeholder="예: https://example.com">
+          </div>
+          <button type="submit" class="btn btn-primary"
+            style="width: 100%; padding: 0.65rem; font-size: 0.85rem; letter-spacing: 0.5px;">공지사항 등록</button>
+        </form>
+      </div>
+
+      <!-- Notice List -->
+      <div>
+        <h3 class="serif" style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 0.75rem;">등록된 공지 목록
+        </h3>
+        <div id="noticeListContainer"
+          style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 300px; overflow-y: auto; padding-right: 0.25rem;">
+          <!-- Notices rendered here as simple cards -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Inquiry Details Modal -->
+  <div id="detailModal" class="admin-modal">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h3 style="font-family:var(--font-serif); font-size:1.1rem; color:var(--color-primary);">상담 문의 상세</h3>
+        <button id="closeModalBtn"
+          style="background:none; border:none; color:#9E948A; font-size:1.5rem; cursor:pointer;">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <span class="modal-label">신청자명</span>
+        <div id="modalName" class="modal-value">-</div>
+
+        <span class="modal-label">연락처 및 이메일</span>
+        <div id="modalContact" class="modal-value">-</div>
+
+        <span class="modal-label">신청 서비스 및 일시</span>
+        <div id="modalService" class="modal-value">-</div>
+
+        <span class="modal-label">상세 내용</span>
+        <div id="modalMessage" class="modal-value" style="white-space:pre-wrap; max-height:120px; overflow-y:auto;">-
+        </div>
+
+        <div class="modal-actions">
+          <span class="modal-label" style="margin-bottom:0.4rem;">진행 상태 변경</span>
+          <div class="action-btn-group">
+            <button id="btnSetWait" class="btn btn-outline"
+              style="font-size:0.75rem; border-color:rgba(226, 76, 76, 0.4); color:#E24C4C; padding:0.4rem;">대기</button>
+            <button id="btnSetIng" class="btn btn-outline"
+              style="font-size:0.75rem; border-color:rgba(222, 178, 91, 0.4); color:#DEB25B; padding:0.4rem;">진행</button>
+            <button id="btnSetDone" class="btn btn-primary"
+              style="font-size:0.75rem; background-color:#5EBA7D; border-color:#5EBA7D; padding:0.4rem;">완료</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notice Edit Modal -->
+  <div id="noticeEditModal" class="admin-modal">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h3 style="font-family:var(--font-serif); font-size:1.1rem; color:var(--color-primary);">공지사항 수정</h3>
+        <button id="closeNoticeModalBtn"
+          style="background:none; border:none; color:#9E948A; font-size:1.5rem; cursor:pointer;">&times;</button>
+      </div>
+      <form id="editNoticeForm">
+        <div class="admin-modal-body">
+          <div style="margin-bottom: 0.75rem;">
+            <span class="modal-label">공지 제목</span>
+            <input type="text" id="editNoticeTitle" class="mobile-input" style="width:100%; box-sizing:border-box;"
+              required>
+          </div>
+          <div style="margin-bottom: 0.75rem;">
+            <span class="modal-label">공지 본문 내용</span>
+            <textarea id="editNoticeContent" class="mobile-input"
+              style="width:100%; height:100px; resize:vertical; line-height:1.5; font-family:inherit; box-sizing:border-box;"
+              required></textarea>
+          </div>
+          <div style="margin-bottom: 0.75rem;">
+            <span class="modal-label">이미지 주소 (선택)</span>
+            <input type="text" id="editNoticeImage" class="mobile-input" style="width:100%; box-sizing:border-box;"
+              placeholder="예: ../assets/logo.png">
+          </div>
+          <div style="margin-bottom: 0.75rem;">
+            <span class="modal-label">유튜브 동영상 ID (선택)</span>
+            <input type="text" id="editNoticeYoutube" class="mobile-input" style="width:100%; box-sizing:border-box;"
+              placeholder="예: dQw4w9WgXcQ">
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <span class="modal-label">링크 바로가기 URL (선택)</span>
+            <input type="text" id="editNoticeLink" class="mobile-input" style="width:100%; box-sizing:border-box;"
+              placeholder="예: https://example.com">
+          </div>
+          <div class="modal-actions"
+            style="display:flex; flex-direction:row; gap:0.5rem; border-top:none; padding-top:0; margin-top:0.5rem;">
+            <button type="button" id="btnCancelNoticeEdit" class="btn btn-outline"
+              style="flex:1; font-size:0.8rem; padding:0.5rem;">취소</button>
+            <button type="submit" class="btn btn-primary"
+              style="flex:1; font-size:0.8rem; padding:0.5rem; letter-spacing:0.5px;">수정 완료</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer" style="margin-top:2rem;">
+    <div class="container" style="text-align:center;">
+      <p style="font-size:0.75rem; opacity:0.5;">© 2026 AI 영상공방. <a href="admin.html"
+          style="color:inherit; text-decoration:none;">Admin</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxODU1sAOm8l-Ce0fz4jEDULzde6Edf0S9tI-b8oo6geQ_opB3Ibx__HlgW-9zJkfNBHg/exec';
+    const isCorrectScriptUrl = GOOGLE_SHEET_WEB_APP_URL && GOOGLE_SHEET_WEB_APP_URL.includes('script.google.com');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Firebase Authentication Session Lock
+      const authOverlay = document.getElementById('authOverlay');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      // 인증 세션 상태 실시간 관찰
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          if (!isAdmin(user.email)) {
+            // 관리자 계정이 아니면 마이페이지로 강제 리다이렉트
+            window.location.href = 'mypage.html';
+            return;
+          }
+          // 로그인된 상태이면 대시보드 로딩 커버를 부드럽게 제거
+          if (authOverlay) {
+            authOverlay.style.opacity = '0';
+            setTimeout(() => {
+              authOverlay.style.display = 'none';
+            }, 400);
+          }
+          console.log("모바일 관리자 세션 인증 완료:", user.email);
+        } else {
+          // 로그인이 되지 않은 상태라면 즉시 로그인 페이지로 리다이렉트
+          window.location.href = 'login.html';
+        }
+      });
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          if (confirm("로그아웃 하시겠습니까?")) {
+            auth.signOut()
+              .then(() => {
+                console.log("로그아웃 완료");
+                window.location.href = 'login.html';
+              })
+              .catch((err) => {
+                console.error("로그아웃 실패:", err);
+              });
+          }
+        });
+      }
+
+      // 2. Mock Database of Inquiries
+      let inquiries = [
+        { id: 6, date: '2026-06-27 14:02', name: '김민주 (개인)', phone: '010-4491-9981', email: 'minju@naver.com', service: 'web', message: '영상공방 사이트 포트폴리오처럼 감성 비디오가 전면에 들어간 3페이지 규모의 브랜드 소개 사이트를 만들고 싶습니다. 기간은 약 2주 정도 예상합니다.', status: 'wait' },
+        { id: 5, date: '2026-06-27 11:45', name: '디저트하우스', phone: '010-1234-5678', email: 'dessert@naver.com', service: 'ad', message: '지난번 15초 광고에 이어 여름 시즌 한정 디저트 추가 릴스 쇼츠 비디오 3편 세트 구성을 재의뢰 드립니다. 빠른 시놉시스 조율 요청합니다.', status: 'wait' },
+        { id: 4, date: '2026-06-26 18:10', name: '박태양 아티스트', phone: '010-8877-6655', email: 'taeyang@gmail.com', service: 'ccm', message: 'CCM 앨범 타이틀 곡 리릭 비디오를 동화풍 감성의 AI 일러스트와 3D 공간 연출을 결합해서 제작하고 싶습니다. 가사가 은혜롭게 연출되었으면 좋겠습니다.', status: 'ing' },
+        { id: 3, date: '2026-06-26 15:30', name: '아이티테크랩', phone: '02-9988-7766', email: 'admin@ittechlab.co.kr', service: 'shorts', message: '저희 회사의 신규 IT 솔루션을 소개하는 지식형 나레이션 쇼츠 영상을 매주 2회 업로드할 예정입니다. 한 달 정기 패키지 금액과 일정 조율 가능할지요.', status: 'ing' },
+        { id: 2, date: '2026-06-25 10:12', name: '초록우산 베이커리', phone: '010-2233-4455', email: 'greenbread@daum.net', service: 'animation', message: '유튜브 채널에 들어갈 따뜻한 동화 분위기의 3D 인트로 애니메이션을 제작하고 싶습니다. 아이를 구하는 곰인형 캐릭터 원안을 첨부할 예정입니다.', status: 'done' },
+        { id: 1, date: '2026-06-24 16:40', name: '윤하은 (CCM 싱어)', phone: '010-9988-1122', email: 'haeun_ccm@naver.com', service: 'ccm', message: '디지털 싱글 음원 발매에 맞춘 유튜브 묵상용 5분 풀버전 감성 뮤직비디오 제작 요청드립니다. 음원은 이메일로 전송해 두었습니다.', status: 'done' }
+      ];
+
+      const serviceLabels = {
+        ad: 'AI 광고 영상',
+        web: '홈페이지 제작',
+        shorts: '쇼츠 제작',
+        animation: '3D 애니메이션',
+        ccm: '뮤직비디오',
+        etc: '기타/대기'
+      };
+
+      // 3. Elements
+      const inquiryList = document.getElementById('inquiryList');
+      const filterService = document.getElementById('filterService');
+      const filterStatus = document.getElementById('filterStatus');
+      const searchKeyword = document.getElementById('searchKeyword');
+
+      const detailModal = document.getElementById('detailModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const modalName = document.getElementById('modalName');
+      const modalContact = document.getElementById('modalContact');
+      const modalService = document.getElementById('modalService');
+      const modalMessage = document.getElementById('modalMessage');
+
+      const btnSetWait = document.getElementById('btnSetWait');
+      const btnSetIng = document.getElementById('btnSetIng');
+      const btnSetDone = document.getElementById('btnSetDone');
+
+      let currentActiveInquiryId = null;
+
+      const statTotal = document.getElementById('statTotal');
+      const statWait = document.getElementById('statWait');
+
+      const updateStats = () => {
+        statTotal.innerText = inquiries.length + '건';
+        statWait.innerText = inquiries.filter(x => x.status === 'wait').length + '건';
+      };
+
+      const renderCards = () => {
+        inquiryList.innerHTML = '';
+
+        const serviceVal = filterService.value;
+        const statusVal = filterStatus.value;
+        const searchVal = searchKeyword.value.trim().toLowerCase();
+
+        const filtered = inquiries.filter(item => {
+          if (serviceVal !== 'all' && item.service !== serviceVal) return false;
+          if (statusVal !== 'all' && item.status !== statusVal) return false;
+          if (searchVal) {
+            const matchName = item.name.toLowerCase().includes(searchVal);
+            const matchPhone = item.phone.replace(/-/g, '').includes(searchVal.replace(/-/g, ''));
+            if (!matchName && !matchPhone) return false;
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          inquiryList.innerHTML = `<div style="text-align:center; color:var(--color-secondary); padding:2rem;">접수된 문의 내역이 없습니다.</div>`;
+          return;
+        }
+
+        filtered.forEach(item => {
+          let statusBadgeClass = 'badge-wait';
+          let statusText = '상담 대기';
+          if (item.status === 'ing') {
+            statusBadgeClass = 'badge-ing';
+            statusText = '상담 중';
+          } else if (item.status === 'done') {
+            statusBadgeClass = 'badge-done';
+            statusText = '상담 완료';
+          }
+
+          const card = document.createElement('div');
+          card.className = 'inquiry-card';
+          card.innerHTML = `
+            <div class="card-header">
+              <span class="card-title">${item.name}</span>
+              <span class="badge ${statusBadgeClass}">${statusText}</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">분류:</span><strong>${serviceLabels[item.service] || item.service}</strong>
+            </div>
+            <div class="card-row">
+              <span class="card-label">신청일시:</span>${item.date}
+            </div>
+            <div class="card-actions">
+              <span style="font-size:0.8rem; color:var(--color-secondary);">${item.phone}</span>
+              <button class="btn btn-primary view-details-btn" data-id="${item.id}" style="font-size:0.75rem; padding:0.35rem 0.75rem;">상세 보기</button>
+            </div>
+          `;
+          inquiryList.appendChild(card);
+        });
+
+        document.querySelectorAll('.view-details-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = parseInt(e.target.getAttribute('data-id'));
+            openModal(id);
+          });
+        });
+      };
+
+      const openModal = (id) => {
+        const item = inquiries.find(x => x.id === id);
+        if (!item) return;
+
+        currentActiveInquiryId = id;
+        modalName.innerText = item.name;
+        modalContact.innerText = `${item.phone} (${item.email})`;
+        modalService.innerText = `${serviceLabels[item.service]} / ${item.date}`;
+        modalMessage.innerText = item.message;
+
+        // Visual check for active status
+        btnSetWait.style.borderWidth = (item.status === 'wait') ? '2px' : '1px';
+        btnSetIng.style.borderWidth = (item.status === 'ing') ? '2px' : '1px';
+        btnSetDone.style.borderWidth = (item.status === 'done') ? '2px' : '1px';
+
+        detailModal.classList.add('active');
+      };
+
+      const closeModal = () => {
+        detailModal.classList.remove('active');
+        currentActiveInquiryId = null;
+      };
+
+      const updateInquiryStatus = (status) => {
+        if (!currentActiveInquiryId) return;
+        const targetId = currentActiveInquiryId;
+        const item = inquiries.find(x => x.id === targetId);
+        if (item) {
+          item.status = status;
+          renderCards();
+          updateStats();
+          closeModal();
+
+          if (isCorrectScriptUrl) {
+            // mode: 'no-cors'를 설정하여 브라우저의 CORS 리다이렉션 차단 정책 우회
+            fetch(`${GOOGLE_SHEET_WEB_APP_URL}?action=updateStatus&id=${targetId}&status=${status}&_=${Date.now()}`, {
+              mode: 'no-cors'
+            })
+              .then(() => {
+                console.log("구글 시트 상태 업데이트 요청 전송 완료 (비동기)");
+              })
+              .catch(err => {
+                console.error("구글 시트 상태 업데이트 네트워크 오류: ", err);
+                alert("네트워크 오류로 구글 시트 업데이트 요청 전송에 실패했습니다.\n[원인] " + err.message);
+              });
+          }
+        }
+      };
+
+      closeModalBtn.addEventListener('click', closeModal);
+      detailModal.addEventListener('click', (e) => {
+        if (e.target === detailModal) closeModal();
+      });
+
+      btnSetWait.addEventListener('click', () => updateInquiryStatus('wait'));
+      btnSetIng.addEventListener('click', () => updateInquiryStatus('ing'));
+      btnSetDone.addEventListener('click', () => updateInquiryStatus('done'));
+
+      filterService.addEventListener('change', renderCards);
+      filterStatus.addEventListener('change', renderCards);
+      searchKeyword.addEventListener('input', renderCards);
+
+      // 4. Main Banner Popup Toggle
+      const toggleMainPopup = document.getElementById('toggleMainPopup');
+      const isPopupDisabled = localStorage.getItem('disablePopupGlobally') === 'true';
+      toggleMainPopup.checked = !isPopupDisabled;
+
+      toggleMainPopup.addEventListener('change', () => {
+        const disable = !toggleMainPopup.checked;
+        localStorage.setItem('disablePopupGlobally', disable ? 'true' : 'false');
+      });
+
+      // 4.1 Custom Popup Content Config
+      const popupImageInput = document.getElementById('popupImageInput');
+      const popupLinkInput = document.getElementById('popupLinkInput');
+      const savePopupConfigBtn = document.getElementById('savePopupConfigBtn');
+      const popupSaveStatus = document.getElementById('popupSaveStatus');
+
+      // Populate dropdown options
+      const populateDropdowns = (yearId, monthId, dayId, hourId) => {
+        const yEl = document.getElementById(yearId);
+        const mEl = document.getElementById(monthId);
+        const dEl = document.getElementById(dayId);
+        const hEl = document.getElementById(hourId);
+
+        yEl.innerHTML = '<option value="">년도(미설정)</option>';
+        for (let y = 2026; y <= 2030; y++) {
+          yEl.innerHTML += `<option value="${y}">${y}년</option>`;
+        }
+
+        mEl.innerHTML = '<option value="">월(미설정)</option>';
+        for (let m = 1; m <= 12; m++) {
+          mEl.innerHTML += `<option value="${String(m).padStart(2, '0')}">${m}월</option>`;
+        }
+
+        dEl.innerHTML = '<option value="">일(미설정)</option>';
+        for (let d = 1; d <= 31; d++) {
+          dEl.innerHTML += `<option value="${String(d).padStart(2, '0')}">${d}일</option>`;
+        }
+
+        hEl.innerHTML = '<option value="">시(미설정)</option>';
+        for (let h = 0; h <= 23; h++) {
+          hEl.innerHTML += `<option value="${String(h).padStart(2, '0')}">${h}시</option>`;
+        }
+      };
+
+      populateDropdowns('startYear', 'startMonth', 'startDay', 'startHour');
+      populateDropdowns('endYear', 'endMonth', 'endDay', 'endHour');
+
+      const loadDateToDropdowns = (key, yearId, monthId, dayId, hourId) => {
+        const val = localStorage.getItem(key);
+        if (val) {
+          try {
+            const dt = new Date(val);
+            if (!isNaN(dt.getTime())) {
+              const y = dt.getFullYear();
+              const m = String(dt.getMonth() + 1).padStart(2, '0');
+              const d = String(dt.getDate()).padStart(2, '0');
+              const h = String(dt.getHours()).padStart(2, '0');
+
+              document.getElementById(yearId).value = y;
+              document.getElementById(monthId).value = m;
+              document.getElementById(dayId).value = d;
+              document.getElementById(hourId).value = h;
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      };
+
+      loadDateToDropdowns('popupStartDate', 'startYear', 'startMonth', 'startDay', 'startHour');
+      loadDateToDropdowns('popupEndDate', 'endYear', 'endMonth', 'endDay', 'endHour');
+
+      const getDateFromDropdowns = (yearId, monthId, dayId, hourId) => {
+        const y = document.getElementById(yearId).value;
+        const m = document.getElementById(monthId).value;
+        const d = document.getElementById(dayId).value;
+        const h = document.getElementById(hourId).value;
+
+        if (!y || !m || !d) {
+          return '';
+        }
+        const hour = h || '00';
+        return `${y}-${m}-${d}T${hour}:00:00`;
+      };
+
+      // Load config
+      popupImageInput.value = localStorage.getItem('popupImage') || '';
+      popupLinkInput.value = localStorage.getItem('popupLink') || '';
+
+      savePopupConfigBtn.addEventListener('click', () => {
+        const imgVal = popupImageInput.value.trim();
+        const linkVal = popupLinkInput.value.trim();
+        const startVal = getDateFromDropdowns('startYear', 'startMonth', 'startDay', 'startHour');
+        const endVal = getDateFromDropdowns('endYear', 'endMonth', 'endDay', 'endHour');
+
+        if (imgVal) {
+          localStorage.setItem('popupImage', imgVal);
+        } else {
+          localStorage.removeItem('popupImage');
+        }
+
+        if (linkVal) {
+          localStorage.setItem('popupLink', linkVal);
+        } else {
+          localStorage.removeItem('popupLink');
+        }
+
+        if (startVal) {
+          localStorage.setItem('popupStartDate', startVal);
+        } else {
+          localStorage.removeItem('popupStartDate');
+        }
+
+        if (endVal) {
+          localStorage.setItem('popupEndDate', endVal);
+        } else {
+          localStorage.removeItem('popupEndDate');
+        }
+
+        popupSaveStatus.style.display = 'block';
+        setTimeout(() => {
+          popupSaveStatus.style.display = 'none';
+        }, 2000);
+      });
+
+      const resetHideTodayBtn = document.getElementById('resetHideTodayBtn');
+      resetHideTodayBtn.addEventListener('click', () => {
+        localStorage.removeItem('hideTodayPopup');
+        alert("오늘 하루 보지 않기 설정이 성공적으로 해제되었습니다! 메인 페이지(index.html)를 새로고침하면 팝업이 다시 노출됩니다.");
+      });
+
+      // 5. Notice Management Logic for Mobile
+      const noticeListContainer = document.getElementById('noticeListContainer');
+      const addNoticeForm = document.getElementById('addNoticeForm');
+      const newNoticeTitle = document.getElementById('newNoticeTitle');
+      const newNoticeContent = document.getElementById('newNoticeContent');
+
+      const defaultNotices = [
+        {
+          id: 2,
+          title: "[이벤트] 홈페이지 제작 서비스 런칭 기념 10% 즉시 할인 프로모션",
+          date: "2026-06-27",
+          content: "안녕하세요, AI 영상공방입니다.\n\n고객님들의 비즈니스 성장을 다방면으로 지원하기 위해 신규 제작 패키지인 '홈페이지 제작' 서비스를 공식 런칭했습니다!\n\n이를 기념하여 7월 한 달간 홈페이지 제작을 의뢰 주시는 선착순 10분께 10% 할인 혜택을 제공하오니 많은 성원 부탁드립니다.\n\n감사합니다."
+        },
+        {
+          id: 1,
+          title: "[공지] AI 영상공방 공식 홈페이지 오픈 안내",
+          date: "2026-06-25",
+          content: "안녕하세요, AI 영상공방입니다.\n\n인공지능 시네마틱 기법과 트렌디한 편집 기법을 결합하여 고품질의 프리미엄 영상물을 제작하는 'AI 영상공방'의 공식 홈페이지가 정식 오픈하였습니다.\n\n광고 제작부터 쇼츠, 3D 애니메이션, 뮤직비디오까지 다양한 영상 프로젝트 견적과 무료 기획안을 상담 받아 보세요.\n\n앞으로 알찬 소식과 혜택으로 찾아뵙겠습니다. 감사합니다."
+        }
+      ];
+
+      const getStoredNotices = () => {
+        let stored = localStorage.getItem('notices');
+        if (stored) {
+          try { return JSON.parse(stored); } catch (e) { return defaultNotices; }
+        }
+        localStorage.setItem('notices', JSON.stringify(defaultNotices));
+        return defaultNotices;
+      };
+
+      const renderNoticeCards = () => {
+        const notices = getStoredNotices();
+        noticeListContainer.innerHTML = '';
+        if (notices.length === 0) {
+          noticeListContainer.innerHTML = '<div style="text-align: center; color: var(--color-secondary); padding: 1.5rem; font-size: 0.85rem;">등록된 공지사항이 없습니다.</div>';
+          return;
+        }
+
+        notices.forEach((item, index) => {
+          const card = document.createElement('div');
+          card.style.cssText = "background: rgba(20, 18, 16, 0.5); border: 1px solid rgba(200, 142, 114, 0.15); border-radius: 6px; padding: 1rem; position: relative;";
+          card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+              <span style="font-weight: 600; color: #FFF; font-size: 0.88rem; line-height: 1.3; flex: 1; padding-right: 0.5rem; word-break: keep-all; text-align: left;">${item.title}</span>
+              <span style="font-size: 0.75rem; color: var(--color-accent); font-weight: bold; white-space: nowrap;">No. ${notices.length - index}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.6rem; border-top: 1px dashed rgba(255,255,255,0.05); padding-top: 0.6rem;">
+              <span style="font-size: 0.75rem; color: var(--color-secondary);">${item.date}</span>
+              <div>
+                <button class="edit-notice-btn" data-id="${item.id}" style="background: none; border: 1px solid rgba(200, 142, 114, 0.4); color: var(--color-primary); padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.7rem; cursor: pointer; margin-right: 0.25rem;">수정</button>
+                <button class="delete-notice-btn" data-id="${item.id}" style="background: none; border: 1px solid rgba(226, 76, 76, 0.4); color: #E24C4C; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.7rem; cursor: pointer;">삭제</button>
+              </div>
+            </div>
+          `;
+          noticeListContainer.appendChild(card);
+        });
+
+        document.querySelectorAll('.delete-notice-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = parseInt(e.target.getAttribute('data-id'));
+            if (confirm("정말로 이 공지사항을 삭제하시겠습니까?")) {
+              deleteNotice(id);
+            }
+          });
+        });
+
+        document.querySelectorAll('.edit-notice-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = parseInt(e.target.getAttribute('data-id'));
+            openNoticeEditModal(id);
+          });
+        });
+      };
+
+      const deleteNotice = (id) => {
+        let notices = getStoredNotices();
+        notices = notices.filter(x => x.id !== id);
+        localStorage.setItem('notices', JSON.stringify(notices));
+        renderNoticeCards();
+      };
+
+      // Notice Edit Modal Logic
+      const noticeEditModal = document.getElementById('noticeEditModal');
+      const closeNoticeModalBtn = document.getElementById('closeNoticeModalBtn');
+      const btnCancelNoticeEdit = document.getElementById('btnCancelNoticeEdit');
+      const editNoticeForm = document.getElementById('editNoticeForm');
+      const editNoticeTitle = document.getElementById('editNoticeTitle');
+      const editNoticeContent = document.getElementById('editNoticeContent');
+      const editNoticeImage = document.getElementById('editNoticeImage');
+      const editNoticeYoutube = document.getElementById('editNoticeYoutube');
+      const editNoticeLink = document.getElementById('editNoticeLink');
+
+      let currentEditingNoticeId = null;
+
+      const openNoticeEditModal = (id) => {
+        const notices = getStoredNotices();
+        const notice = notices.find(x => x.id === id);
+        if (!notice) return;
+
+        currentEditingNoticeId = id;
+        editNoticeTitle.value = notice.title;
+        editNoticeContent.value = notice.content;
+        editNoticeImage.value = notice.image || '';
+        editNoticeYoutube.value = notice.youtube || '';
+        editNoticeLink.value = notice.link || '';
+
+        noticeEditModal.classList.add('active');
+      };
+
+      const closeNoticeEditModal = () => {
+        noticeEditModal.classList.remove('active');
+        currentEditingNoticeId = null;
+      };
+
+      if (closeNoticeModalBtn) closeNoticeModalBtn.addEventListener('click', closeNoticeEditModal);
+      if (btnCancelNoticeEdit) btnCancelNoticeEdit.addEventListener('click', closeNoticeEditModal);
+      if (noticeEditModal) {
+        noticeEditModal.addEventListener('click', (e) => {
+          if (e.target === noticeEditModal) closeNoticeEditModal();
+        });
+      }
+
+      if (editNoticeForm) {
+        editNoticeForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (!currentEditingNoticeId) return;
+
+          const title = editNoticeTitle.value.trim();
+          const content = editNoticeContent.value.trim();
+          const imgVal = editNoticeImage.value.trim();
+          const ytVal = editNoticeYoutube.value.trim();
+          const linkVal = editNoticeLink.value.trim();
+          if (!title || !content) return;
+
+          let notices = getStoredNotices();
+          const idx = notices.findIndex(x => x.id === currentEditingNoticeId);
+          if (idx !== -1) {
+            notices[idx].title = title;
+            notices[idx].content = content;
+            notices[idx].image = imgVal;
+            notices[idx].youtube = ytVal;
+            notices[idx].link = linkVal;
+            localStorage.setItem('notices', JSON.stringify(notices));
+            renderNoticeCards();
+            closeNoticeEditModal();
+            alert("공지사항이 수정되었습니다!");
+          }
+        });
+      }
+
+      if (addNoticeForm) {
+        const newNoticeImage = document.getElementById('newNoticeImage');
+        const newNoticeYoutube = document.getElementById('newNoticeYoutube');
+        const newNoticeLink = document.getElementById('newNoticeLink');
+
+        addNoticeForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const title = newNoticeTitle.value.trim();
+          const content = newNoticeContent.value.trim();
+          const imgVal = newNoticeImage.value.trim();
+          const ytVal = newNoticeYoutube.value.trim();
+          const linkVal = newNoticeLink.value.trim();
+          if (!title || !content) return;
+
+          let notices = getStoredNotices();
+          const nextId = notices.length > 0 ? Math.max(...notices.map(x => x.id)) + 1 : 1;
+          const today = new Date().toISOString().slice(0, 10);
+
+          const newNotice = {
+            id: nextId,
+            title: title,
+            date: today,
+            content: content,
+            image: imgVal,
+            youtube: ytVal,
+            link: linkVal
+          };
+
+          notices.unshift(newNotice);
+          localStorage.setItem('notices', JSON.stringify(notices));
+
+          newNoticeTitle.value = '';
+          newNoticeContent.value = '';
+          newNoticeImage.value = '';
+          newNoticeYoutube.value = '';
+          newNoticeLink.value = '';
+
+          renderNoticeCards();
+          alert("신규 공지사항이 등록되었습니다!");
+        });
+      }
+
+      const syncStatusDesc = document.getElementById('syncStatusDesc');
+
+      const fetchInquiries = () => {
+        if (isCorrectScriptUrl) {
+          if (syncStatusDesc) {
+            syncStatusDesc.innerText = '구글 스프레드시트에서 데이터를 가져오는 중...';
+            syncStatusDesc.style.color = '#9E948A';
+          }
+          fetch(`${GOOGLE_SHEET_WEB_APP_URL}?action=adminList&key=admin_secret_key_2026&_=${Date.now()}`)
+            .then(res => {
+              if (!res.ok) throw new Error("HTTP error " + res.status);
+              return res.json();
+            })
+            .then(data => {
+              if (Array.isArray(data)) {
+                inquiries = data;
+                renderCards();
+                updateStats();
+                if (syncStatusDesc) {
+                  syncStatusDesc.innerText = '구글 시트와 실시간 연동 중입니다.';
+                  syncStatusDesc.style.color = '#5EBA7D';
+                }
+              } else {
+                throw new Error("올바르지 않은 데이터 형식");
+              }
+            })
+            .catch(err => {
+              console.error("구글 시트 연동 로드 실패: ", err);
+              if (syncStatusDesc) {
+                syncStatusDesc.innerText = '연동 실패: 구글 앱스 스크립트 연결 및 권한을 확인하세요.';
+                syncStatusDesc.style.color = '#E24C4C';
+              }
+            });
+        } else {
+          if (syncStatusDesc) {
+            syncStatusDesc.innerText = '동기화 비활성 (로컬 시뮬레이션 모드)';
+            syncStatusDesc.style.color = '#9E948A';
+          }
+        }
+      };
+
+      // Initial Render
+      updateStats();
+      renderCards();
+      renderNoticeCards();
+      fetchInquiries();
+    });
+  </script>
+</body>
+
+</html>

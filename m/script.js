@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. Mobile Menu Toggle
   const mobileToggle = document.getElementById('mobileToggle');
   const navMenu = document.getElementById('navMenu');
-  
+
   if (mobileToggle && navMenu) {
     mobileToggle.addEventListener('click', () => {
       mobileToggle.classList.toggle('active');
@@ -20,15 +20,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 1-2. Mobile Dropdown Toggle for 'Services'
+  const dropdownLi = document.querySelector('li.dropdown');
+  const dropdownToggle = document.querySelector('.dropdown-toggle');
+  
+  if (dropdownToggle && dropdownLi) {
+    dropdownToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropdownLi.classList.toggle('open');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!dropdownLi.contains(e.target)) {
+        dropdownLi.classList.remove('open');
+      }
+    });
+  }
+
   // 2. Active Nav Link Highlight based on current HTML filename
   const path = window.location.pathname;
   const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-  const navLinks = document.querySelectorAll('.nav-link');
+  const navLinks = document.querySelectorAll('.nav-link, .dropdown-link');
 
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
     if (href && href.includes(currentPage)) {
       link.classList.add('active');
+      
+      // 하위 메뉴가 활성화 상태인 경우 부모 '서비스' 칩 버튼도 활성화 상태로 표시
+      if (link.classList.contains('dropdown-link')) {
+        const parentToggle = link.closest('.dropdown')?.querySelector('.nav-link');
+        if (parentToggle) {
+          parentToggle.classList.add('active');
+        }
+      }
     } else {
       link.classList.remove('active');
     }
@@ -42,14 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
       card.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         activeClickedCard = card;
 
         let lightbox = document.querySelector('.video-lightbox');
         if (!lightbox) {
           lightbox = document.createElement('div');
           lightbox.className = 'video-lightbox';
-          
+
           const wrapper = document.createElement('div');
           wrapper.className = 'lightbox-wrapper';
 
@@ -73,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const closeLightbox = () => {
             lightbox.style.opacity = '0';
             wrapper.style.transform = 'scale(0.95)';
-            
+
             if (activeClickedCard) {
               activeClickedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
@@ -96,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const wrapper = lightbox.querySelector('.lightbox-wrapper');
         const container = lightbox.querySelector('.lightbox-container');
-        
+
         const oldIframe = container.querySelector('iframe');
         if (oldIframe) oldIframe.remove();
 
@@ -110,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         iframe.style.cssText = "width: 100%; height: 100%; border: none; display: block;";
 
         container.appendChild(iframe);
-        
+
         lightbox.style.display = 'flex';
         lightbox.offsetHeight; // force reflow
         lightbox.style.opacity = '1';
@@ -132,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 5. Consultation Form & Success Modal
-  const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw7ewaBs1Cb8wUgkpaTe5qwLbpFntdt49NQN9yykiMwpI9I-EuxnYqCySgj00nQ5nJ0bA/exec';
+  const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxODU1sAOm8l-Ce0fz4jEDULzde6Edf0S9tI-b8oo6geQ_opB3Ibx__HlgW-9zJkfNBHg/exec';
 
   const consultationForm = document.getElementById('consultationForm');
   const successModal = document.getElementById('successModal');
@@ -142,18 +169,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (consultationForm && successModal && closeModalBtn) {
     consultationForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      
+
       const clientName = document.getElementById('clientName').value.trim();
       const clientPhone = document.getElementById('clientPhone').value.trim();
       const clientEmail = document.getElementById('clientEmail').value.trim();
       const serviceType = document.getElementById('serviceType').value;
       const clientMessage = document.getElementById('clientMessage').value.trim();
-      
+
       if (!clientName || !clientPhone || !clientEmail || !serviceType || !clientMessage) {
         alert('모든 필수 항목(*)을 채워주세요.');
         return;
       }
-      
+
       const originalBtnText = submitBtn ? submitBtn.innerText : '무료 상담 신청하기';
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -186,13 +213,13 @@ document.addEventListener('DOMContentLoaded', () => {
           mode: 'no-cors',
           body: formData
         })
-        .then(() => {
-          showSuccess();
-        })
-        .catch(err => {
-          console.error('스프레드시트 전송 실패:', err);
-          showSuccess();
-        });
+          .then(() => {
+            showSuccess();
+          })
+          .catch(err => {
+            console.error('스프레드시트 전송 실패:', err);
+            showSuccess();
+          });
       } else {
         setTimeout(showSuccess, 800);
       }
@@ -207,5 +234,83 @@ document.addEventListener('DOMContentLoaded', () => {
         successModal.classList.remove('active');
       }
     });
+  }
+
+  // 6. Dynamic Navigation Link Swap (Login -> Logout & MyPage/Admin)
+  const navMenuElement = document.getElementById('navMenu');
+  if (navMenuElement) {
+    const loadFirebaseScripts = () => {
+      return new Promise((resolve, reject) => {
+        if (window.firebase && window.auth) {
+          resolve();
+          return;
+        }
+        
+        const sApp = document.createElement('script');
+        sApp.src = "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js";
+        sApp.onload = () => {
+          const sAuth = document.createElement('script');
+          sAuth.src = "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js";
+          sAuth.onload = () => {
+            const isMobile = window.location.pathname.includes('/m/');
+            const sConfig = document.createElement('script');
+            sConfig.src = (isMobile ? "../" : "./") + "firebase-config.js?v=1.0.2";
+            sConfig.onload = () => {
+              resolve();
+            };
+            sConfig.onerror = reject;
+            document.head.appendChild(sConfig);
+          };
+          sAuth.onerror = reject;
+          document.head.appendChild(sAuth);
+        };
+        sApp.onerror = reject;
+        document.head.appendChild(sApp);
+      });
+    };
+
+    loadFirebaseScripts().then(() => {
+      auth.onAuthStateChanged((user) => {
+        const loginLink = navMenuElement.querySelector('a[href="login.html"]');
+        if (loginLink && loginLink.parentElement) {
+          const li = loginLink.parentElement;
+          
+          if (user) {
+            const isPageMobile = window.location.pathname.includes('/m/');
+            const dashboardPage = isAdmin(user.email) ? 'admin.html' : 'mypage.html';
+            const dashboardText = isAdmin(user.email) ? '관리자' : '마이페이지';
+            
+            // Check if current page is dashboard to apply active highlighting
+            const pathName = window.location.pathname;
+            const currentPageName = pathName.substring(pathName.lastIndexOf('/') + 1) || 'index.html';
+            const isActive = currentPageName.includes(dashboardPage);
+            const activeClass = isActive ? 'active' : '';
+
+            li.innerHTML = `<a href="${dashboardPage}" class="nav-link ${activeClass}">${dashboardText}</a>`;
+            
+            // Create and append logout link if it doesn't exist
+            let logoutLi = document.getElementById('navLogoutLi');
+            if (!logoutLi) {
+              logoutLi = document.createElement('li');
+              logoutLi.id = 'navLogoutLi';
+              logoutLi.innerHTML = `<a href="#" id="navLogoutBtn" class="nav-link">로그아웃</a>`;
+              li.parentNode.insertBefore(logoutLi, li.nextSibling);
+              
+              const logoutBtn = document.getElementById('navLogoutBtn');
+              if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  if (confirm("로그아웃 하시겠습니까?")) {
+                    auth.signOut().then(() => {
+                      window.location.reload();
+                    });
+                  }
+                });
+              }
+            }
+          }
+        }
+      });
+    }).catch(err => console.error("Firebase SDK loading failed:", err));
   }
 });
